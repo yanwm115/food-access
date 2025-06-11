@@ -25,3 +25,4 @@ chart1 = alt.Chart(df).mark_circle(opacity=0.7).encode(
 ).interactive()
 
 st.altair_chart(chart1, use_container_width=True)
+

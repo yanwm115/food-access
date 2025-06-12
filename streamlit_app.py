@@ -5,6 +5,7 @@ import pandas as pd
 df = pd.read_csv("Massachusetts Food Access Data - Sheet1.csv")
 
 st.title("🥘 Food Access in Massachusetts")
+st.set_page_config(layout="wide")
 st.write(
     "Let's start building! For help and inspiration, head over to [docs.streamlit.io](https://docs.streamlit.io/)."
 )

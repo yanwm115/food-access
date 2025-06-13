@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -13,7 +14,7 @@ df["LowAccessPopulation"] = df["LALOWI05_10"].fillna(0)
 top10 = df.nlargest(10, "LowAccessPopulation")[["CensusTract", "County", "LowAccessPopulation"]]
 
 
-# ───── Overview Section ─────
+# Overview/Intro
 total_tracts = len(df)
 percent_LILA = (df["LILATracts_1And10"].sum() / total_tracts) * 100
 avg_poverty = df["PovertyRate"].mean()
@@ -25,7 +26,7 @@ col2.metric("% LILA Tracts", f"{percent_LILA:.1f}%")
 col3.metric("Avg Poverty Rate", f"{avg_poverty:.1f}%")
 col4.metric("Avg Median Family Income", f"${avg_income:,.0f}")
 
-# ───── Sidebar Filters ─────
+# Sidebar Filters
 st.sidebar.header("🔎 Filters")
 counties = ["All"] + sorted(df["County"].dropna().unique())
 selected_county = st.sidebar.selectbox("County", counties)
@@ -35,7 +36,6 @@ income_max = int(df["MedianFamilyIncome"].max())
 income_range = st.sidebar.slider("Median Income Range", min_value=income_min,
                                  max_value=income_max, value=(income_min, income_max))
 
-# Apply filters
 filtered = df.copy()
 if selected_county != "All":
     filtered = filtered[filtered["County"] == selected_county]
@@ -44,7 +44,7 @@ if urban_only:
 filtered = filtered[(filtered["MedianFamilyIncome"] >= income_range[0]) &
                     (filtered["MedianFamilyIncome"] <= income_range[1])]
 
-# ───── Charts: Income vs Poverty (Chart 1) + Vehicle Access (Chart 2) ─────
+# Chart 1 (linked to Chart 2)
 st.subheader("📊 Coordinated Visualizations")
 
 brush = alt.selection_interval()
@@ -96,8 +96,7 @@ with col2:
     st.altair_chart(bar_fallback, use_container_width=True)
 
 
-
-# ───── Chart 3: Top 10 Food Inaccessible Tracts ─────
+# Chart 3: Top 10 Food Inaccessible Tracts 
 st.subheader("🏙️ Top 10 Tracts with Highest Low-Access Population")
 
 bar_top10 = alt.Chart(top10).mark_bar().encode(
@@ -112,7 +111,7 @@ bar_top10 = alt.Chart(top10).mark_bar().encode(
 
 st.altair_chart(bar_top10, use_container_width=True)
 
-# ───── Key Takeaways Section ─────
+# Key Takeaways Section 
 with st.expander("📌 Key Takeaways and Reflections"):
     st.markdown("""
 ### 💡 Summary of Insights
@@ -135,6 +134,58 @@ While this dashboard focuses on Massachusetts, similar patterns exist nationwide
 A more just food system means confronting **transportation**, **poverty**, **zoning laws**, and **health disparities** together.
     """)
 
+# CHART 4: GEO MAP - made up coordinates as placeholders
+import numpy as np
+import pydeck as pdk
+
+# Simulate lat/lon for visualization (for demo purposes only)
+# Replace this with actual coordinates per tract if available
+np.random.seed(42)
+filtered_map = filtered.copy()
+county_latlon = {
+    "Barnstable County": (41.7, -70.3),
+    "Bristol County": (41.8, -71.1),
+    "Essex County": (42.6, -70.9),
+    "Hampden County": (42.1, -72.6),
+    "Hampshire County": (42.4, -72.6),
+    "Middlesex County": (42.5, -71.3),
+    "Norfolk County": (42.2, -71.2),
+    "Plymouth County": (42.0, -70.8),
+    "Suffolk County": (42.35, -71.07),
+    "Worcester County": (42.3, -71.8),
+}
+
+filtered_map["lat"] = filtered_map["County"].apply(lambda x: county_latlon.get(x, (42.3, -71.1))[0] + np.random.uniform(-0.05, 0.05))
+filtered_map["lon"] = filtered_map["County"].apply(lambda x: county_latlon.get(x, (42.3, -71.1))[1] + np.random.uniform(-0.05, 0.05))
+
+# Define color by category
+filtered_map["color"] = filtered_map["LILATracts_1And10"].apply(lambda x: [255, 0, 0] if x == 1 else [0, 120, 255])
+
+st.subheader("🗺️ Geo Map of Low-Income / Low-Access Tracts")
+
+st.pydeck_chart(pdk.Deck(
+    map_style='mapbox://styles/mapbox/light-v9',
+    initial_view_state=pdk.ViewState(
+        latitude=42.3,
+        longitude=-71.1,
+        zoom=7,
+        pitch=0,
+    ),
+    layers=[
+        pdk.Layer(
+            'ScatterplotLayer',
+            data=filtered_map,
+            get_position='[lon, lat]',
+            get_fill_color='color',
+            get_radius=500,
+            pickable=True,
+            auto_highlight=True,
+        )
+    ],
+    tooltip={"text": "Tract: {CensusTract}\nCounty: {County}\nIncome: ${MedianFamilyIncome}\nNo Vehicle: {Pct_Households_No_Vehicle:.1f}%"}
+))
+
+
 '''
 # visualization 1 (will attempt to switch)
 chart1 = alt.Chart(df).mark_circle(opacity=0.7).encode(
@@ -152,4 +203,3 @@ chart1 = alt.Chart(df).mark_circle(opacity=0.7).encode(
 ).interactive()
 
 st.altair_chart(chart1, use_container_width=True) '''
-

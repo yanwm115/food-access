@@ -43,12 +43,11 @@ if urban_only:
 filtered = filtered[(filtered["MedianFamilyIncome"] >= income_range[0]) &
                     (filtered["MedianFamilyIncome"] <= income_range[1])]
 
-# Chart 1 (linked to Chart 2)
-st.subheader("📊 Coordinated Visualizations")
-
-brush = alt.selection_interval()
 
 # Chart 1: Scatter Plot with Brushing
+st.subheader("📊 Coordinated Visualizations")
+brush = alt.selection_interval()
+
 scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     x=alt.X("MedianFamilyIncome:Q", title="Median Family Income"),
     y=alt.Y("PovertyRate:Q", title="Poverty Rate (%)"),
@@ -99,8 +98,8 @@ with col2:
 st.subheader("🏙️ Top 10 Tracts with Highest Low-Access Population")
 
 bar_top10 = alt.Chart(top10).mark_bar().encode(
-    x=alt.X("LowAccessPopulation:Q", title="Low-Access Population"),
-    y=alt.Y("CensusTract:N", sort="-x", title="Census Tract"),
+    x=alt.X("CensusTract:N", sort="-x", title="Census Tract"),
+    y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
     tooltip=["County", "LowAccessPopulation"]
 ).properties(
     width=700,

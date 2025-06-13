@@ -200,7 +200,7 @@ with st.expander("📌 Key Takeaways and Reflections"):
 
 ### 🩺 Health Implications
 Food insecurity contributes to:
-- Higher rates of **chronic disease** (e.g. diabetes, hypertension)
+- Higher rates of **chronic disease** (e.g. diabetes, obesity)
 - Poor **mental health outcomes**
 - Increased healthcare costs and systemic strain
 

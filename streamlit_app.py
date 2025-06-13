@@ -18,23 +18,23 @@ st.subheader("📝 **Overview: Understanding Food Access**")
 with st.expander("📝 Overview: Understanding Food Access"):
     st.markdown("""
 Food access refers to the ability of individuals and communities to obtain affordable and
-nutricious food that meets needs through physical proximity to food sources, economic affordability,
+nutritious food that meets needs through physical proximity to food sources, economic affordability,
 and social accessibility. Food access is fundamentally linked to public health, economic stability, 
 and social inequity.
 
 When people lack adequate food access, they may experience food insecurity: the condition of having limited 
 or uncertain availability of nutritionally adequate foods, due to the lack of money and other resources. People who 
 experience food insecurity often live in food deserts (areas with limited access to grocery stores) or food swamps 
-(areas with many fast food and convenient stores).
+(areas with many fast food and convenience stores).
                 
 Despite being one of the wealthiest states in the nation, Massachusetts faces significant food access 
-challenges across it's diverse communities. Urban areas struggle with food deserts and limited grocery store access 
-and have concentrated low income populations with poor food acess. Rural areas present transportation barriers for 
+challenges across its diverse communities. Urban areas struggle with food deserts and limited grocery store access 
+and have concentrated low-income populations with poor food access. Rural areas present transportation barriers for 
 people who travel long distances to grocery stores.
                 
 The following data visualizations focus on Massachusetts to demonstrate that food access limitations and 
 food insecurity persist even in wealthy states with strong social safety nets. By examining Massachusetts, we can see 
-how economic inequality, geographic barriers, and systemic challenges create food access desparities. The patterns 
+how economic inequality, geographic barriers, and systemic challenges create food access disparities. The patterns 
 relationships, and insights revealed through the data on Massachusetts can be applied to understand food access 
 challenges in other states across the country, providing a framework for analyzing how local factors interact 
 with broader socioeconomic forces to shape food security outcomes.
@@ -218,10 +218,8 @@ with st.expander("📌 Key Takeaways and Reflections"):
 
 ### 🩺 Health Implications
 Food insecurity contributes to:
-- Higher rates of **chronic disease** (e.g. diabetes, hypertension, cardiovascular disease, obesity) due to reliance on processed, calorie dense foods
-                that provide sustenance but lack essential nutrients.
-- Poor **mental health outcomes** increased rates of depression, anxiety, and stress related disorders from the chronic stress of not knowing when the 
-                next meal will come.
+- Higher rates of **chronic disease** (e.g. diabetes, hypertension, cardiovascular disease, obesity) due to reliance on processed, calorie dense foods that provide sustenance but lack essential nutrients.
+- Poor **mental health outcomes** increased rates of depression, anxiety, and stress-related disorders from the chronic stress of not knowing when the next meal will come.
 - Increased healthcare costs and systemic strain as there would be an increase in emergency room visits, hospital readmissions, and
                 long term care needs.
 

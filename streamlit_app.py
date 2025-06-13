@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -111,28 +110,6 @@ bar_top10 = alt.Chart(top10).mark_bar().encode(
 
 st.altair_chart(bar_top10, use_container_width=True)
 
-# Key Takeaways Section 
-with st.expander("📌 Key Takeaways and Reflections"):
-    st.markdown("""
-### 💡 Summary of Insights
-- Tracts with **low median family income** and **high poverty rates** are often also classified as **Low-Income and Low Access (LILA)**.
-- Lack of **vehicle access** adds another layer of difficulty in accessing grocery stores, especially in these high-need communities.
-- The **top 10 most food-inaccessible tracts** span multiple counties, revealing that this is not just an urban or rural issue — it's widespread.
-
-### 🩺 Health Implications
-Food insecurity contributes to:
-- Higher rates of **chronic disease** (e.g. diabetes, hypertension)
-- Poor **mental health outcomes**
-- Increased healthcare costs and systemic strain
-
-### 🏛️ Policy & Equity Considerations
-- Data like this should inform **grocery store placements**, **transportation subsidies**, and **SNAP/WIC outreach**.
-- Equity-focused infrastructure investment can reduce access gaps.
-
-### 🌎 Beyond Massachusetts
-While this dashboard focuses on Massachusetts, similar patterns exist nationwide.  
-A more just food system means confronting **transportation**, **poverty**, **zoning laws**, and **health disparities** together.
-    """)
 
 # CHART 4: GEO MAP - made up coordinates as placeholders
 import numpy as np
@@ -184,6 +161,29 @@ st.pydeck_chart(pdk.Deck(
     ],
     tooltip={"text": "Tract: {CensusTract}\nCounty: {County}\nIncome: ${MedianFamilyIncome}\nNo Vehicle: {Pct_Households_No_Vehicle:.1f}%"}
 ))
+
+# Key Takeaways Section 
+with st.expander("📌 Key Takeaways and Reflections"):
+    st.markdown("""
+### 💡 Summary of Insights
+- Tracts with **low median family income** and **high poverty rates** are often also classified as **Low-Income and Low Access (LILA)**.
+- Lack of **vehicle access** adds another layer of difficulty in accessing grocery stores, especially in these high-need communities.
+- The **top 10 most food-inaccessible tracts** span multiple counties, revealing that this is not just an urban or rural issue — it's widespread.
+
+### 🩺 Health Implications
+Food insecurity contributes to:
+- Higher rates of **chronic disease** (e.g. diabetes, hypertension)
+- Poor **mental health outcomes**
+- Increased healthcare costs and systemic strain
+
+### 🏛️ Policy & Equity Considerations
+- Data like this should inform **grocery store placements**, **transportation subsidies**, and **SNAP/WIC outreach**.
+- Equity-focused infrastructure investment can reduce access gaps.
+
+### 🌎 Beyond Massachusetts
+While this dashboard focuses on Massachusetts, similar patterns exist nationwide.  
+A more just food system means confronting **transportation**, **poverty**, **zoning laws**, and **health disparities** together.
+    """)
 
 
 '''

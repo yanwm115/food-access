@@ -13,7 +13,6 @@ df["LowAccessPopulation"] = df["LALOWI05_10"].fillna(0)
 top10 = df.nlargest(10, "LowAccessPopulation")[["CensusTract", "County", "LowAccessPopulation"]]
 
 
-
 # ───── Overview Section ─────
 total_tracts = len(df)
 percent_LILA = (df["LILATracts_1And10"].sum() / total_tracts) * 100
@@ -96,12 +95,9 @@ with col1:
 with col2:
     st.altair_chart(bar_fallback, use_container_width=True)
 
-# Extra: Add brushed version below (user can scroll)
-with st.expander("🔍 See Brushed Selection Only (Chart 2 Updated)"):
-    st.altair_chart(bar_brushed, use_container_width=True)
 
 
-# ───── Chart: Top 10 Food Inaccessible Tracts ─────
+# ───── Chart 3: Top 10 Food Inaccessible Tracts ─────
 st.subheader("🏙️ Top 10 Tracts with Highest Low-Access Population")
 
 bar_top10 = alt.Chart(top10).mark_bar().encode(

@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-from vega_datasets import data
 
 df = pd.read_csv("Massachusetts Food Access Data - Sheet1.csv")
 st.set_page_config(layout="wide")

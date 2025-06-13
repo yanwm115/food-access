@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+from vega_datasets import data
 
 df = pd.read_csv("Massachusetts Food Access Data - Sheet1.csv")
 st.set_page_config(layout="wide")
@@ -15,24 +16,30 @@ top10 = df.nlargest(10, "LowAccessPopulation")[["CensusTract", "County", "LowAcc
 
 # Overview/Intro
 st.subheader("📝 **Overview: Understanding Food Access**")
-st.write("Food access refers to the ability of individuals and communities to obtain affordable and " \
-"nutricious food that meets needs through physical proximity to food sources, economic affordability," \
-"and social accessibility. Food access is fundamentally linked to public health, economic stability, "
-"and social inequity.")
-st.write("When people lack adequate food access, they may experience food insecurity: the condition of having limited "
-"or uncertain availability of nutritionally adequate foods, due to the lack of money and other resources. People who " \
-"experience food insecurity often live in food deserts (areas with limited access to grocery stores) or food swamps " \
-"(areas with many fast food and convenient stores).")
-st.write("Despite being one of the wealthiest states in the nation, Massachusetts faces significant food access" \
-"challenges across it's diverse communities. Urban areas struggle with food deserts and limited grocery store access " \
-"and have concentrated low income populations with poor food acess. Rural areas present transportation barriers for " \
-"people who travel long distances to grocery stores.")
-st.write("The following data visualizations focus on Massachusetts to demonstrate that food access limitations and "
-"food insecurity persist even in wealthy states with strong social safety nets. By examining Massachusetts, we can see "
-"how economic inequality, geographic barriers, and systemic challenges create food access desparities. The patterns "
-"relationships, and insights revealed through the data on Massachusetts can be applied to understand food access "
-"challenges in other states across the country, providing a framework for analyzing how local factors interact "
-"with broader socioeconomic forces to shape food security outcomes.")
+with st.expander("📝 Overview: Understanding Food Access"):
+    st.markdown("""
+Food access refers to the ability of individuals and communities to obtain affordable and
+nutricious food that meets needs through physical proximity to food sources, economic affordability,
+and social accessibility. Food access is fundamentally linked to public health, economic stability, 
+and social inequity.
+
+When people lack adequate food access, they may experience food insecurity: the condition of having limited 
+or uncertain availability of nutritionally adequate foods, due to the lack of money and other resources. People who 
+experience food insecurity often live in food deserts (areas with limited access to grocery stores) or food swamps 
+(areas with many fast food and convenient stores).
+                
+Despite being one of the wealthiest states in the nation, Massachusetts faces significant food access 
+challenges across it's diverse communities. Urban areas struggle with food deserts and limited grocery store access 
+and have concentrated low income populations with poor food acess. Rural areas present transportation barriers for 
+people who travel long distances to grocery stores.
+                
+The following data visualizations focus on Massachusetts to demonstrate that food access limitations and 
+food insecurity persist even in wealthy states with strong social safety nets. By examining Massachusetts, we can see 
+how economic inequality, geographic barriers, and systemic challenges create food access desparities. The patterns 
+relationships, and insights revealed through the data on Massachusetts can be applied to understand food access 
+challenges in other states across the country, providing a framework for analyzing how local factors interact 
+with broader socioeconomic forces to shape food security outcomes.
+        """)
 
 total_tracts = len(df)
 percent_LILA = (df["LILATracts_1And10"].sum() / total_tracts) * 100
@@ -86,33 +93,33 @@ scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
 ).properties(
     title="Chart 1: Median Family Income vs Poverty Rate",
     width=600,
-    height=400
-)
+    height=430
+).interactive()
 
 # Chart 2A: Brushed Bar Chart (linked to scatter)
 bar_brushed = alt.Chart(filtered).transform_filter(
     brush
 ).mark_bar().encode(
-    x=alt.X("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle"),
+    x=alt.X("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", scale=alt.Scale(domain=[0, 40])),
     y=alt.Y("County:N", sort="-x", title="County"),
     color=alt.Color("County:N", title="County", scale=alt.Scale(scheme='category20')),
     tooltip=["mean(Pct_Households_No_Vehicle):Q"],
 ).properties(
     title="Chart 2: % Without Vehicles (From Brushed Scatter Selection)",
     width=600,
-    height=400
+    height=430
 )
 
 # Chart 2B: Full fallback bar chart (unlinked)
 bar_fallback = alt.Chart(filtered).mark_bar().encode(
-    x=alt.X("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle"),
+    x=alt.X("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", scale=alt.Scale(domain=[0, 40])),
     y=alt.Y("County:N", sort="-x", title="County"),
     color=alt.Color("County:N", title="County", scale=alt.Scale(scheme='category20')),
     tooltip=["mean(Pct_Households_No_Vehicle):Q"],
 ).properties(
     title="Chart 2: % Without Vehicles (All Filtered Tracts)",
     width=600,
-    height=400
+    height=430
 )
 
 # Layout: Put Chart 1 and Chart 2 fallback together
@@ -191,6 +198,7 @@ st.pydeck_chart(pdk.Deck(
 ))
 
 # Key Takeaways Section 
+st.subheader("📌 Key Takeaways and Reflections")
 with st.expander("📌 Key Takeaways and Reflections"):
     st.markdown("""
 ### 💡 Summary of Insights
@@ -200,9 +208,12 @@ with st.expander("📌 Key Takeaways and Reflections"):
 
 ### 🩺 Health Implications
 Food insecurity contributes to:
-- Higher rates of **chronic disease** (e.g. diabetes, hypertension)
-- Poor **mental health outcomes**
-- Increased healthcare costs and systemic strain
+- Higher rates of **chronic disease** (e.g. diabetes, hypertension, cardiovascular disease, obesity) due to reliance on processed, calorie dense foods
+                that provide sustenance but lack essential nutrients.
+- Poor **mental health outcomes** increased rates of depression, anxiety, and stress related disorders from the chronic stress of not knowing when the 
+                next meal will come.
+- Increased healthcare costs and systemic strain as there would be an increase in emergency room visits, hospital readmissions, and
+                long term care needs.
 
 ### 🏛️ Policy & Equity Considerations
 - Data like this should inform **grocery store placements**, **transportation subsidies**, and **SNAP/WIC outreach**.
@@ -210,6 +221,5 @@ Food insecurity contributes to:
 
 ### 🌎 Beyond Massachusetts
 While this dashboard focuses on Massachusetts, similar patterns exist nationwide.  
-A more just food system means confronting **transportation**, **poverty**, **zoning laws**, and **health disparities** together.
+A more just food system means confronting **transportation**, **poverty**, **zoning laws**, and **health disparities** together. 
     """)
-

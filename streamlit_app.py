@@ -71,15 +71,6 @@ if urban_only: filtered = filtered[filtered["Urban"] == 1]
 filtered = filtered[(filtered["MedianFamilyIncome"] >= income_range[0]) &
                     (filtered["MedianFamilyIncome"] <= income_range[1])]
 
-""" filtered = df.copy()
-if selected_county != "All":
-    filtered = filtered[filtered["County"] == selected_county]
-if urban_only:
-    filtered = filtered[filtered["Urban"] == 1]
-filtered = filtered[(filtered["MedianFamilyIncome"] >= income_range[0]) &
-                    (filtered["MedianFamilyIncome"] <= income_range[1])] """
-
-
 # Chart 1: Scatter Plot with Brushing
 st.subheader("📊 Coordinated Visualizations")
 brush = alt.selection_interval()
@@ -222,21 +213,3 @@ While this dashboard focuses on Massachusetts, similar patterns exist nationwide
 A more just food system means confronting **transportation**, **poverty**, **zoning laws**, and **health disparities** together.
     """)
 
-
-'''
-# visualization 1 (will attempt to switch)
-chart1 = alt.Chart(df).mark_circle(opacity=0.7).encode(
-    x=alt.X("MedianFamilyIncome",
-            scale=alt.Scale(domain=[0, df["MedianFamilyIncome"].max() + 1000]),
-            axis=alt.Axis(tickMinStep=1000, title="Median Family Income")),
-    y=alt.Y("PovertyRate", title="Poverty Rate (%)"),
-    size=alt.Size("Pop2010", title="Population", scale=alt.Scale(range=[0, 100])),
-    color=alt.Color("County", title="County"),
-    tooltip=["CensusTract", "County", "Urban", "Pop2010", "PovertyRate","MedianFamilyIncome"]
-).properties(
-    title="Median Family Income vs Poverty Rate",
-    width=600,
-    height=400
-).interactive()
-
-st.altair_chart(chart1, use_container_width=True) '''

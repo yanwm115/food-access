@@ -145,56 +145,67 @@ bar_top10 = alt.Chart(top10).mark_bar().encode(
 st.altair_chart(bar_top10, use_container_width=True)
 
 
-# CHART 4: GEO MAP - made up coordinates as placeholders
-import numpy as np
-import pydeck as pdk
+# CHART 4: Choropleth Map of MA 
+import plotly.express as px
+import requests
 
-# Simulate lat/lon for visualization (for demo purposes only)
-# Replace this with actual coordinates per tract if available
-np.random.seed(42)
-filtered_map = filtered.copy()
-county_latlon = {
-    "Barnstable County": (41.7, -70.3),
-    "Bristol County": (41.8, -71.1),
-    "Essex County": (42.6, -70.9),
-    "Hampden County": (42.1, -72.6),
-    "Hampshire County": (42.4, -72.6),
-    "Middlesex County": (42.5, -71.3),
-    "Norfolk County": (42.2, -71.2),
-    "Plymouth County": (42.0, -70.8),
-    "Suffolk County": (42.35, -71.07),
-    "Worcester County": (42.3, -71.8),
+county_summary = df.groupby("County").agg({
+    "LILATracts_1And10": "sum",
+    "CensusTract": "count",
+    "Pct_Households_No_Vehicle": "mean",
+    "MedianFamilyIncome": "mean",
+    "PovertyRate": "mean"
+}).reset_index()
+
+county_summary["% LILA Tracts"] = (
+    county_summary["LILATracts_1And10"] / county_summary["CensusTract"]
+) * 100
+
+county_fips = {
+    "Barnstable County": "25001", "Berkshire County": "25003", "Bristol County": "25005",
+    "Dukes County": "25007", "Essex County": "25009", "Franklin County": "25011",
+    "Hampden County": "25013", "Hampshire County": "25015", "Middlesex County": "25017",
+    "Nantucket County": "25019", "Norfolk County": "25021", "Plymouth County": "25023",
+    "Suffolk County": "25025", "Worcester County": "25027"
 }
+county_summary["fips"] = county_summary["County"].map(county_fips)
 
-filtered_map["lat"] = filtered_map["County"].apply(lambda x: county_latlon.get(x, (42.3, -71.1))[0] + np.random.uniform(-0.05, 0.05))
-filtered_map["lon"] = filtered_map["County"].apply(lambda x: county_latlon.get(x, (42.3, -71.1))[1] + np.random.uniform(-0.05, 0.05))
+geo_url = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"
+geo_json = requests.get(geo_url).json()
 
-# Define color by category
-filtered_map["color"] = filtered_map["LILATracts_1And10"].apply(lambda x: [255, 0, 0] if x == 1 else [0, 120, 255])
+all_fips = [feature["id"] for feature in geo_json["features"]]
+all_counties_df = pd.DataFrame({"fips": all_fips})
+choropleth_df = all_counties_df.merge(county_summary, on="fips", how="left")
 
-st.subheader("🗺️ Geo Map of Low-Income / Low-Access Tracts")
+fig = px.choropleth(
+    choropleth_df,
+    geojson=geo_json,
+    locations="fips",
+    color="% LILA Tracts",
+    color_continuous_scale="Reds",
+    range_color=(0, county_summary["% LILA Tracts"].max()),
+    labels={"% LILA Tracts": "% LILA Tracts"},
+    hover_data={
+        "County": True,
+        "MedianFamilyIncome": True,
+        "PovertyRate": True,
+        "Pct_Households_No_Vehicle": True,
+        "fips": False
+    },
+    title="🗺️ % of Low-Income, Low-Access (LILA) Tracts by County in Massachusetts and Surrounding States"
+)
 
-st.pydeck_chart(pdk.Deck(
-    map_style='mapbox://styles/mapbox/light-v9',
-    initial_view_state=pdk.ViewState(
-        latitude=42.3,
-        longitude=-71.1,
-        zoom=7,
-        pitch=0,
-    ),
-    layers=[
-        pdk.Layer(
-            'ScatterplotLayer',
-            data=filtered_map,
-            get_position='[lon, lat]',
-            get_fill_color='color',
-            get_radius=500,
-            pickable=True,
-            auto_highlight=True,
-        )
-    ],
-    tooltip={"text": "Tract: {CensusTract}\nCounty: {County}\nIncome: ${MedianFamilyIncome}\nNo Vehicle: {Pct_Households_No_Vehicle:.1f}%"}
-))
+fig.update_geos(
+    visible=False,
+    fitbounds="locations",
+    projection_scale=3.5,  # Zoom out more to show MA + neighbors
+    center={"lat": 42.8, "lon": -73.0}  # Center over MA/NY border
+)
+
+
+st.subheader("📍 Interactive Food Access Choropleth Map (Plotly)")
+st.plotly_chart(fig, use_container_width=True)
+
 
 # Key Takeaways Section 
 st.subheader("📌 Key Takeaways and Reflections")

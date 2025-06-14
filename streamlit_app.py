@@ -202,7 +202,6 @@ fig.update_geos(
     center={"lat": 42.8, "lon": -73.0}  # Center over MA/NY border
 )
 
-
 st.subheader("🗺️ Food Access Map")
 st.plotly_chart(fig, use_container_width=True)
 

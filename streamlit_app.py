@@ -78,7 +78,7 @@ filtered = filtered[(filtered["MedianFamilyIncome"] >= income_range[0]) &
                     (filtered["MedianFamilyIncome"] <= income_range[1])]
 
 # Chart 1: Scatter Plot with Brushing
-st.subheader("📊 Coordinated Visualizations")
+st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
 brush = alt.selection_interval()
 
 scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
@@ -192,7 +192,7 @@ fig = px.choropleth(
         "Pct_Households_No_Vehicle": True,
         "fips": False
     },
-    title="🗺️ Percentage of Low-Income Low-Access (LILA) Tracts by County"
+    title="Percentage of Low-Income Low-Access (LILA) Tracts by County"
 )
 
 fig.update_geos(
@@ -203,7 +203,7 @@ fig.update_geos(
 )
 
 
-st.subheader("📍 Interactive Food Access Choropleth Map (Plotly)")
+st.subheader("🗺️ Food Access Map")
 st.plotly_chart(fig, use_container_width=True)
 
 

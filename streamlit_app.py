@@ -104,7 +104,7 @@ bar_brushed = alt.Chart(filtered).transform_filter(
     color=alt.Color("County:N", title="County", scale=alt.Scale(scheme='category20')),
     tooltip=["mean(Pct_Households_No_Vehicle):Q"],
 ).properties(
-    title="Chart 2: % Without Vehicles (From Brushed Scatter Selection)",
+    title="Percentage of Households Without Vehicles",
     width=600,
     height=430
 )
@@ -116,7 +116,7 @@ bar_fallback = alt.Chart(filtered).mark_bar().encode(
     color=alt.Color("County:N", title="County", scale=alt.Scale(scheme='category20')),
     tooltip=["mean(Pct_Households_No_Vehicle):Q"],
 ).properties(
-    title="Chart 2: % Without Vehicles (All Filtered Tracts)",
+    title="Percentage of Households Without Vehicles",
     width=600,
     height=430
 )
@@ -192,7 +192,7 @@ fig = px.choropleth(
         "Pct_Households_No_Vehicle": True,
         "fips": False
     },
-    title="🗺️ % of Low-Income, Low-Access (LILA) Tracts by County in Massachusetts and Surrounding States"
+    title="🗺️ Percentage of Low-Income Low-Access (LILA) Tracts by County"
 )
 
 fig.update_geos(

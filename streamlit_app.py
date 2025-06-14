@@ -89,11 +89,21 @@ selection = alt.selection_point(
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
 brush = alt.selection_interval()
 
-st.subheader("📝 **Tips and Notes for Coordinated Visualizations**")
-with st.expander("📝 Tips!"):
-    st.markdown(""" 
 
-                """)
+with st.expander("📝 Tips!"):
+    st.markdown("""
+### 📈 Charts
+- When **County** is selected as **All**, you can hover over the point/bar on the chart/plot.
+- You can hover over the charts to see additional information about the county on all the charts!
+- On the **Median Family Income vs Poverty Rate** scatterplot, you can interact with it by zooming and brushing.  
+
+### 🔍 Sidebar
+- The **County** filter is to help explore the county you are interested in! 
+- The **Compare with Other Counties** can be used to select other counties you want to compare the initial county you chose in **County**. You can choose more than one!
+- By selecting the check box **Urban Tracts Only** you can see the census tracts that fall within an urban area. 
+- By dragging the **Median Income Range** bar, you can choose your desired income range you want to explore. 
+    """)
+    
 scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     x=alt.X("MedianFamilyIncome:Q", title="Median Family Income"),
     y=alt.Y("PovertyRate:Q", title="Poverty Rate (%)"),
@@ -149,7 +159,7 @@ with col2:
 
 # Chart 3: Top 10 Food Inaccessible Tracts 
 st.subheader("🏙️ Top 10 Tracts with Highest Low-Access Population")
-
+st.write("Hover over each bar in the graph to view exact numbers of the low access population in each county and to see which county!")
 bar_top10 = alt.Chart(top10).mark_bar().encode(
     x=alt.X("CensusTract:N", sort="-x", title="Census Tract", axis=alt.Axis(labelAngle=0)),
     y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
@@ -220,6 +230,7 @@ fig.update_geos(
 )
 
 st.subheader("🗺️ Food Access Map")
+st.write("Hover over each county to see which county it is, percentage of LILA Tracts, and more! You can also interact with the map by zooming in and out.")
 st.plotly_chart(fig, use_container_width=True)
 
 # Key Takeaways Section 

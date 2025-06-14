@@ -48,8 +48,8 @@ avg_income = df["MedianFamilyIncome"].mean()
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Total Census Tracts", f"{total_tracts}")
 col2.metric("% LILA Tracts", f"{percent_LILA:.1f}%")
-col3.metric("Avg Poverty Rate", f"{avg_poverty:.1f}%")
-col4.metric("Avg Median Family Income", f"${avg_income:,.0f}")
+col3.metric("Average Poverty Rate", f"{avg_poverty:.1f}%")
+col4.metric("Average Median Family Income", f"${avg_income:,.0f}")
 
 # Sidebar Filters
 st.sidebar.header("🔎 Filters")
@@ -228,6 +228,6 @@ Food insecurity contributes to:
 - Equity-focused infrastructure investment can reduce access gaps.
 
 ### 🌎 Beyond Massachusetts
-While this dashboard focuses on Massachusetts, similar patterns exist nationwide.  
-A more just food system means confronting **transportation**, **poverty**, **zoning laws**, and **health disparities** together. 
+- While this dashboard focuses on Massachusetts, similar patterns exist nationwide.  
+- A more just food system means confronting **transportation**, **poverty**, **zoning laws**, and **health disparities** together. 
     """)

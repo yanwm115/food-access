@@ -133,7 +133,7 @@ with col2:
 st.subheader("🏙️ Top 10 Tracts with Highest Low-Access Population")
 
 bar_top10 = alt.Chart(top10).mark_bar().encode(
-    x=alt.X("CensusTract:N", sort="-x", title="Census Tract"),
+    x=alt.X("CensusTract:N", sort="-x", title="Census Tract", axis=alt.Axis(labelAngle=0)),
     y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
     tooltip=["County", "LowAccessPopulation"]
 ).properties(

@@ -90,7 +90,7 @@ scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
 ).add_selection(
     brush
 ).properties(
-    title="Chart 1: Median Family Income vs Poverty Rate",
+    title="Median Family Income vs Poverty Rate",
     width=600,
     height=430
 ).interactive()

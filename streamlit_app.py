@@ -6,6 +6,7 @@ df = pd.read_csv("Massachusetts Food Access Data - Sheet1.csv")
 st.set_page_config(layout="wide")
 st.title("🥗✅ Mapping Food Access in Massachusetts")
 
+df["County"] = df["County"].str.replace(" County", "", regex=False)
 df["Pct_Households_No_Vehicle"] = (df["TractHUNV"] / df["OHU2010"]) * 100
 df["LowAccessPopulation"] = df["LALOWI05_10"].fillna(0)
 

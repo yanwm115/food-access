@@ -210,91 +210,96 @@ st.altair_chart(bar_top10, use_container_width=True)
 
 st.markdown("---")
 
-# CHART 4: Choropleth Map of MA
-import plotly.express as px
+# Chart 4: Map
+import plotly.graph_objects as go
 import requests
 
-# Aggregate county-level statistics
-county_summary = df.groupby("County").agg({
+county_fips = {
+    "Barnstable": "25001", "Berkshire": "25003", "Bristol": "25005", "Dukes": "25007",
+    "Essex": "25009", "Franklin": "25011", "Hampden": "25013", "Hampshire": "25015",
+    "Middlesex": "25017", "Nantucket": "25019", "Norfolk": "25021", "Plymouth": "25023",
+    "Suffolk": "25025", "Worcester": "25027"}
+
+county_summary = df.groupby("County", as_index=False).agg({
     "LILATracts_1And10": "sum",
     "CensusTract": "count",
     "Pct_Households_No_Vehicle": "mean",
     "MedianFamilyIncome": "mean",
-    "PovertyRate": "mean"
-}).reset_index()
+    "PovertyRate": "mean"})
 
-# Calculate % LILA Tracts
 county_summary["% LILA Tracts"] = (
-    county_summary["LILATracts_1And10"] / county_summary["CensusTract"]
-) * 100
-
-# Round numeric values to 2 decimal places
-county_summary["MedianFamilyIncome"] = county_summary["MedianFamilyIncome"].round(2)
-county_summary["PovertyRate"] = county_summary["PovertyRate"].round(2)
-county_summary["Pct_Households_No_Vehicle"] = county_summary["Pct_Households_No_Vehicle"].round(2)
-county_summary["% LILA Tracts"] = county_summary["% LILA Tracts"].round(2)
-
-# Rename columns for cleaner tooltips
+    county_summary["LILATracts_1And10"] / county_summary["CensusTract"]) * 100
+county_summary = county_summary.round(2)
 county_summary.rename(columns={
     "MedianFamilyIncome": "Median Family Income ($)",
     "PovertyRate": "Poverty Rate (%)",
     "Pct_Households_No_Vehicle": "% Without Vehicle",
 }, inplace=True)
-
-# Add FIPS codes
-county_fips = {
-    "Barnstable County": "25001", "Berkshire County": "25003", "Bristol County": "25005",
-    "Dukes County": "25007", "Essex County": "25009", "Franklin County": "25011",
-    "Hampden County": "25013", "Hampshire County": "25015", "Middlesex County": "25017",
-    "Nantucket County": "25019", "Norfolk County": "25021", "Plymouth County": "25023",
-    "Suffolk County": "25025", "Worcester County": "25027"
-}
 county_summary["fips"] = county_summary["County"].map(county_fips)
 
-# Load US counties geojson
+for island in ["Dukes", "Nantucket"]:
+    if island not in county_summary["County"].values:
+        county_summary = county_summary.append({
+            "County": island,
+            "LILATracts_1And10": 0,
+            "CensusTract": 1,
+            "% LILA Tracts": 0,
+            "Median Family Income ($)": 0,
+            "Poverty Rate (%)": 0,
+            "% Without Vehicle": 0,
+            "fips": county_fips[island]
+        }, ignore_index=True)
+
 geo_url = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"
 geo_json = requests.get(geo_url).json()
+geo_json["features"] = [f for f in geo_json["features"] if f["id"].startswith("25")]
 
-# Merge geo info with summary
-all_fips = [feature["id"] for feature in geo_json["features"]]
-all_counties_df = pd.DataFrame({"fips": all_fips})
-choropleth_df = all_counties_df.merge(county_summary, on="fips", how="left")
-
-# Create the choropleth map
-fig = px.choropleth(
-    choropleth_df,
+choropleth = go.Choropleth(
     geojson=geo_json,
-    locations="fips",
-    color="% LILA Tracts",
-    color_continuous_scale="Reds",
-    range_color=(0, county_summary["% LILA Tracts"].max()),
-    labels={
-        "% LILA Tracts": "% LILA Tracts",
-        "Median Family Income ($)": "Median Family Income ($)",
-        "Poverty Rate (%)": "Poverty Rate (%)",
-        "% Without Vehicle": "% Without Vehicle"
-    },
-    hover_data={
-        "County": True,
-        "Median Family Income ($)": True,
-        "Poverty Rate (%)": True,
-        "% Without Vehicle": True,
-        "fips": False
-    },
-    title="Percentage of Low-Income Low-Access (LILA) Tracts by County"
-)
+    locations=county_summary["fips"],
+    z=county_summary["% LILA Tracts"],
+    colorscale="Reds",
+    zmin=0,
+    zmax=county_summary["% LILA Tracts"].max(),
+    marker_line_color="black",
+    marker_line_width=0.5,
+    featureidkey="id",
+    colorbar_title="% LILA Tracts",
+    hovertext=county_summary.apply(
+        lambda row: (
+            f"{row['County']}<br>% LILA: {row['% LILA Tracts']:.2f}%<br>"
+            f"Income: ${row['Median Family Income ($)']:,}<br>"
+            f"Poverty Rate: {row['Poverty Rate (%)']:.2f}%<br>"
+            f"% w/o Vehicle: {row['% Without Vehicle']:.2f}%"
+        ), axis=1),
+    hoverinfo="text")
 
-# Configure map appearance
-fig.update_geos(
-    visible=False,
-    fitbounds="locations",
-    projection_scale=3.5,
-    center={"lat": 42.8, "lon": -73.0}
-)
+highlight = None
+if selected_county != "All" and selected_county in county_fips:
+    selected_fips = county_fips[selected_county]
+    selected_feature = next((f for f in geo_json["features"] if f["id"] == selected_fips), None)
+    if selected_feature:
+        highlight = go.Choropleth(
+            geojson={"type": "FeatureCollection", "features": [selected_feature]},
+            locations=[selected_fips],
+            z=[0],
+            colorscale=[[0, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,0)']],
+            showscale=False,
+            marker_line_color="black",
+            marker_line_width=2.5,
+            featureidkey="id",
+            hoverinfo="skip")
+
+fig = go.Figure(data=[choropleth] + ([highlight] if highlight else []))
+fig.update_geos(fitbounds="locations", visible=False)
+fig.update_layout(
+    title="Percentage of Low-Income Low-Access (LILA) Tracts by Massachusetts County",
+    margin={"r": 0, "t": 50, "l": 0, "b": 0})
 
 st.subheader("🗺️ Food Access Map")
-st.write("Hover over each county to see which county it is, percentage of LILA Tracts, and more! You can also interact with the map by zooming in and out.")
+st.write("Selected county is highlighted with a bold black border. Dukes and Nantucket shown as 0% if no data.")
 st.plotly_chart(fig, use_container_width=True)
+
 
 st.markdown("---")
 

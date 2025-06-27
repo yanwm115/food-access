@@ -65,7 +65,6 @@ with st.expander("📝 Tips!"):
 - By dragging the **Median Income Range** bar, you can choose your desired income range you want to explore. 
     """)
 
-st.markdown("---")
 
 total_tracts = len(df)
 percent_LILA = (df["LILATracts_1And10"].sum() / total_tracts) * 100
@@ -77,6 +76,8 @@ col1.metric("Total Census Tracts", f"{total_tracts}")
 col2.metric("% LILA Tracts", f"{percent_LILA:.1f}%")
 col3.metric("Average Poverty Rate", f"{avg_poverty:.1f}%")
 col4.metric("Average Median Family Income", f"${avg_income:,.0f}")
+
+st.markdown("---")
 
 # Sidebar Filters
 st.sidebar.header("🔎 Filters")
@@ -200,7 +201,7 @@ bar_top10 = alt.Chart(top10).mark_bar().encode(
     height=400,
     title="Top 10 Tracts with Highest Food Inaccessibility"
 )
-st.markdown("---")
+
 st.altair_chart(bar_top10, use_container_width=True)
 
 st.markdown("---")

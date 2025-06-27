@@ -65,6 +65,7 @@ with st.expander("📝 Tips!"):
 - By dragging the **Median Income Range** bar, you can choose your desired income range you want to explore. 
     """)
 
+st.markdown("---")
 
 total_tracts = len(df)
 percent_LILA = (df["LILATracts_1And10"].sum() / total_tracts) * 100
@@ -111,7 +112,6 @@ selection = alt.selection_point(
     on = "mouseover"
 )
 
-st.markdown("---")
 
 # Chart 1: Scatter Plot with Brushing
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
@@ -200,7 +200,7 @@ bar_top10 = alt.Chart(top10).mark_bar().encode(
     height=400,
     title="Top 10 Tracts with Highest Food Inaccessibility"
 )
-
+st.markdown("---")
 st.altair_chart(bar_top10, use_container_width=True)
 
 st.markdown("---")

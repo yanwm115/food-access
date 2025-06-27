@@ -111,7 +111,7 @@ selection = alt.selection_point(
     on = "mouseover"
 )
 
-
+st.markdown("---")
 
 # Chart 1: Scatter Plot with Brushing
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
@@ -140,7 +140,7 @@ scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     selection
 ).interactive()
 
-st.markdown("---")
+
 
 # Chart 2A: Brushed Bar Chart (linked to scatter)
 bar_brushed = alt.Chart(filtered).transform_filter(
@@ -202,6 +202,8 @@ bar_top10 = alt.Chart(top10).mark_bar().encode(
 )
 
 st.altair_chart(bar_top10, use_container_width=True)
+
+st.markdown("---")
 
 # CHART 4: Choropleth Map of MA
 import plotly.express as px

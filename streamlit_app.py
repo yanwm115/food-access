@@ -40,6 +40,17 @@ challenges in other states across the country, providing a framework for analyzi
 with broader socioeconomic forces to shape food security outcomes.
         """)
 
+
+###Definiitons
+# Add definitions expander
+with st.expander("📚 Key Definitions"):
+    st.markdown("""
+- **Census Tracts**: Small, relatively permanent geographic subdivisions of a county designed for statistical purposes by the U.S. Census Bureau.
+- **LILA (Low-Income, Low-Access) Tracts**: Census tracts where a significant share of the population is both low-income and lives far from the nearest grocery store.
+- **Urban Tracts**: Tracts designated as part of an urban area, generally meaning they are densely populated and developed compared to rural areas.
+    """)
+
+
 total_tracts = len(df)
 percent_LILA = (df["LILATracts_1And10"].sum() / total_tracts) * 100
 avg_poverty = df["PovertyRate"].mean()

@@ -14,12 +14,14 @@ df["LowAccessPopulation"] = df["LALOWI05_10"].fillna(0)
 top10 = df.nlargest(10, "LowAccessPopulation")[["CensusTract", "County", "LowAccessPopulation"]]
 
 
-# Overview/Intro
-st.subheader("📝 **Overview**")
-with st.expander("📝 Understanding Food Access"):
+st.subheader("📝 Understanding Food Access")
+
+intro_tab, defs_tab, tips_tab = st.tabs(["📄 Overview", "📚 Definitions", "💡 Tips"])
+
+with intro_tab:
     st.markdown("""
 Food access refers to the ability of ​​individuals and communities to obtain affordable, 
-nutritious food –  shaped by physical proximity, economic affordability, and social 
+nutritious food – shaped by physical proximity, economic affordability, and social 
 accessibility. It is fundamentally linked to public health, economic stability, and social equity.
 
 When access is limited, individuals may face food insecurity: limited or uncertain availability 
@@ -33,32 +35,35 @@ while rural areas struggle with transportation barriers.
 This dashboard focuses on Massachusetts to show that food insecurity can persist even in states 
 with strong safety nets. These patterns highlight how economic inequality, geography, and systemic 
 issues shape food access – offering insights that apply across the U.S.
-        """)
+""")
 
-
-# Definiitons
-# Add definitions expander
-with st.expander("📚 Key Definitions"):
+with defs_tab:
     st.markdown("""
-- **Census Tracts**: Small, relatively permanent geographic subdivisions of a county designed for statistical purposes by the U.S. Census Bureau.
-- **LILA (Low-Income, Low-Access) Tracts**: Census tracts where a significant share of the population is both low-income and lives far from the nearest grocery store.
-- **Urban Tracts**: Tracts designated as part of an urban area, generally meaning they are densely populated and developed compared to rural areas.
+- **Census Tracts**: Small geographic areas within a county, used by the U.S. Census Bureau to collect and analyze population data.  
+- **LILA (Low-Income, Low-Access) Tracts**: Areas where a large portion of residents have low incomes and live far from supermarkets 
+                or large grocery stores. These tracts face compounded challenges in both affordability and physical access to food.  
+- **Urban Tracts**: Tracts designated as part of an urban area, generally meaning they are densely populated and developed compared to rural areas.  
+""")
+    
+with tips_tab:
+    st.markdown("""
+### 📈 Using the Charts
+- When **"All"** is selected in the **County** dropdown, all counties will appear in the charts.
+- Hover over any scatterplot point, bar, or map area for detailed information.
+- You can zoom and pan on interactive charts when noted.
+
+### 🔍 Exploring with the Sidebar
+Each filter is labeled with which visualization it affects:
+- **County**: Focuses the entire dashboard on one county.
+- **Compare with Other Counties**: Adds other counties for side-by-side comparison.
+- **Urban Tracts Only**: Limits the view to only tracts designated as urban.
+- **Median Income Range**: Filters census tracts within your selected income range.
+
+### 🧭 Look Below for Insights
+- Colored context boxes below each chart provide guidance and takeaways based on your selections.
     """)
 
-# Tips for using sidebar
-with st.expander("📝 Tips!"):
-    st.markdown("""
-### 📈 Charts
-- When **County** is selected as **All**, you can hover over the point/bar on the chart/plot.
-- You can hover over the charts to see additional information about the county on all the charts!
-- On the **Median Family Income vs Poverty Rate** scatterplot, you can interact with it by zooming and brushing.  
 
-### 🔍 Sidebar
-- The **County** filter is to help explore the county you are interested in! 
-- The **Compare with Other Counties** can be used to select other counties you want to compare the initial county you chose in **County**. You can choose more than one!
-- By selecting the check box **Urban Tracts Only** you can see the census tracts that fall within an urban area. 
-- By dragging the **Median Income Range** bar, you can choose your desired income range you want to explore. 
-    """)
 
 
 total_tracts = len(df)
@@ -136,16 +141,6 @@ scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     selection
 ).interactive()
 
-st.markdown(
-    f"""
-    <div style="background-color: #fffbe6; padding: 1rem; border-radius: 0.5rem; text-align: center; color: #665c00; font-size: 16px;">
-        💡 <strong>What does this tell us?</strong><br>
-        Census tracts with <strong>lower median family incomes</strong> often experience <strong>higher poverty rates</strong>, creating a visible inverse trend. These areas also tend to have <strong>more households without vehicles</strong>, deepening access challenges to essential services like grocery stores.<br><br>
-        Suffolk and Hampden counties stand out with the <strong>highest share of households lacking vehicles</strong> — a key factor in food access vulnerability.
-    </div>
-    """,
-    unsafe_allow_html=True
-)
 
 # Chart 2A: Bar Chart (linked to scatter)
 bar_chart = alt.Chart(filtered).mark_bar().encode(
@@ -199,6 +194,15 @@ with col1:
 with col2:
     st.altair_chart(bar_fallback, use_container_width=True)
 
+
+st.markdown(
+    f"""
+    <div style="background-color: #fffbe6; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #665c00; font-size: 16px;">
+        💡 Census tracts with <strong>lower median family incomes</strong> often experience <strong>higher poverty rates</strong>, creating a visible inverse trend. These areas also tend to have <strong>more households without vehicles</strong>, deepening access challenges to essential services like grocery stores.<br><br>
+        Suffolk and Hampden counties stand out with the <strong>highest share of households lacking vehicles</strong> — a key factor in food access vulnerability.
+    </div>
+    """, unsafe_allow_html=True)
+
 st.markdown("---")
 
 # Chart 3: Top 10 Food Inaccessible Tracts 
@@ -218,6 +222,7 @@ bar_top10 = alt.Chart(top10).mark_bar().encode(
 )
 
 st.altair_chart(bar_top10, use_container_width=True)
+
 
 st.markdown("---")
 
@@ -316,9 +321,7 @@ st.markdown(
     <div style="background-color: #fdecea; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #611a15; font-size: 16px;">
         💡 This map reveals that patterns of food access vary significantly across Massachusetts. Counties like <strong>{selected_county}</strong> may show higher rates of LILA tracts, signaling deeper food access challenges.<br><br>
     </div>
-    """,
-    unsafe_allow_html=True
-)
+    """, unsafe_allow_html=True)
 
 
 st.markdown("---")

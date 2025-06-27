@@ -318,3 +318,103 @@ Food insecurity contributes to:
 - While this dashboard focuses on Massachusetts, similar patterns exist nationwide.  
 - A more just food system means confronting **transportation**, **poverty**, **zoning laws**, and **health disparities** together. 
     """)
+
+# TEST
+st.markdown("test 1")
+st.subheader("📌 Key Takeaways and Reflections")
+
+# High-level summary
+st.markdown("""
+### 💡 Summary of Insights
+- Tracts with **low median family income** and **high poverty rates** are often also classified as **Low-Income and Low Access (LILA)**.
+- Lack of **vehicle access** adds another barrier to accessing grocery stores, especially in these high-need communities.
+- The **top 10 most food-inaccessible tracts** span multiple counties — this is not just an urban or rural issue; it's widespread.
+
+🧪 *Want to explore health or policy implications further? Expand the sections below.*
+""")
+
+with st.expander("🩺 Health Implications"):
+    st.markdown("""
+Food insecurity contributes to:
+
+- **Chronic diseases** like diabetes, hypertension, cardiovascular disease, and obesity due to reliance on processed, calorie-dense foods.
+- **Poor mental health outcomes**, including higher rates of depression, anxiety, and stress-related disorders from the uncertainty of consistent food access.
+- **Increased healthcare costs and systemic strain**, driven by more emergency room visits, hospital readmissions, and long-term care needs.
+    """)
+
+with st.expander("🏛️ Policy & Equity Recommendations"):
+    st.markdown("""
+To address food access equitably, we must:
+
+- 🛒 **Prioritize grocery store placement** in food deserts using incentives for retailers or community-owned co-ops.
+- 🚍 **Subsidize public transportation** for low-income households to improve grocery access.
+- 🧾 **Expand SNAP/WIC awareness and registration**, especially through mobile or outreach programs.
+- 📜 **Reform zoning laws** to allow for flexible food retail options like pop-up markets and mobile vendors.
+- 🧩 Encourage **cross-sector collaboration** among housing, health, and transportation agencies for holistic solutions.
+
+**Equity-first investment** in infrastructure is essential to close food access gaps.
+    """)
+
+with st.expander("🌎 Beyond Massachusetts + Call to Action"):
+    st.markdown("""
+Massachusetts reflects broader national trends.
+
+- 🗺️ Similar disparities exist in states like California, Louisiana, and New York.
+- 🧠 Addressing food access means confronting **transportation**, **poverty**, **zoning laws**, and **health disparities** together.
+- 📣 **Call to Action**:
+    - Support local policies that invest in **community-driven food access**.
+    - Advocate for **intersectional planning** in food, housing, and transit.
+    - Volunteer or partner with local food justice initiatives.
+
+Together, we can build a more just and resilient food system.
+    """)
+
+st.markdown("test 2")
+st.subheader("📌 Key Takeaways and Reflections")
+
+tab1, tab2, tab3, tab4 = st.tabs(["Summary", "Health Impacts", "Policy Recommendations", "Beyond MA + Action"])
+
+with tab1:
+    st.markdown("""
+### 💡 Summary of Insights
+- Tracts with **low median family income** and **high poverty rates** are often also classified as **Low-Income and Low Access (LILA)**.
+- Lack of **vehicle access** is a critical barrier for food access.
+- The **top 10 food-inaccessible tracts** are spread across urban and rural counties.
+
+This is a **statewide and national challenge** with real public health and equity implications.
+    """)
+
+with tab2:
+    st.markdown("""
+### 🩺 Health Implications
+
+- **Higher rates of chronic disease** (e.g. diabetes, hypertension) from reliance on low-nutrient, high-calorie food options.
+- **Poor mental health outcomes** due to chronic stress over food insecurity.
+- **Increased healthcare costs** and strain on emergency services, especially in underserved regions.
+    """)
+
+with tab3:
+    st.markdown("""
+### 🏛️ Policy & Equity Recommendations
+
+- 🛒 Incentivize **grocery store development** in underserved tracts.
+- 🚍 Fund **transportation programs** for low-income and vehicle-less communities.
+- 🧾 Scale up **SNAP/WIC access and outreach** in low-access regions.
+- 📜 Remove **zoning barriers** to allow mobile and pop-up grocery markets.
+- 🏗️ Encourage **cross-department collaboration** between health, transit, housing, and food agencies.
+
+**Actionable data like this dashboard** should inform equity-centered urban and rural planning.
+    """)
+
+with tab4:
+    st.markdown("""
+### 🌎 Beyond Massachusetts + Call to Action
+
+- Food deserts and access inequities exist **nationwide**, from Appalachia to the Bay Area.
+- A **just food system** requires collaboration across sectors: food, housing, transportation, and health.
+- 📣 **What You Can Do**:
+    - Vote and advocate for **policies that support food justice**.
+    - Partner with or volunteer for **local mutual aid groups and food co-ops**.
+    - Use and share tools like this dashboard to **inform others and drive action**.
+    """)
+

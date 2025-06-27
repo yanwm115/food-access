@@ -120,7 +120,13 @@ scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     y=alt.Y("PovertyRate:Q", title="Poverty Rate (%)"),
     size=alt.Size("Pop2010:Q", title="Population", scale=alt.Scale(range=[0, 100])),
     color=alt.Color("County:N", title="County", scale=alt.Scale(scheme='category20')),
-    tooltip=["CensusTract", "County", "Pop2010", "PovertyRate", "MedianFamilyIncome"]
+    tooltip=[
+    alt.Tooltip("CensusTract:N", title="Census Tract"),
+    alt.Tooltip("County:N", title="County"),
+    alt.Tooltip("Pop2010:Q", title="Population", format=",.0f"),
+    alt.Tooltip("PovertyRate:Q", title="Poverty Rate (%)", format=".2f"),
+    alt.Tooltip("MedianFamilyIncome:Q", title="Median Family Income", format="$.2f")
+]
 ).add_selection(
     brush
 ).properties(
@@ -138,7 +144,9 @@ bar_brushed = alt.Chart(filtered).transform_filter(
     x=alt.X("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", scale=alt.Scale(domain=[0, 40])),
     y=alt.Y("County:N", sort="-x", title="County"),
     color=alt.Color("County:N", title="County", scale=alt.Scale(scheme='category20')),
-    tooltip=["mean(Pct_Households_No_Vehicle):Q"],
+    tooltip=[
+    alt.Tooltip("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", format=".2f")
+]
 ).properties(
     title="Percentage of Households Without Vehicles",
     width=600,
@@ -152,7 +160,9 @@ bar_fallback = alt.Chart(filtered).mark_bar().encode(
     x=alt.X("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", scale=alt.Scale(domain=[0, 40])),
     y=alt.Y("County:N", sort="-x", title="County"),
     color=alt.Color("County:N", title="County", scale=alt.Scale(scheme='category20')),
-    tooltip=["mean(Pct_Households_No_Vehicle):Q"],
+    tooltip=[
+        alt.Tooltip("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", format=".2f")
+    ]
 ).properties(
     title="Percentage of Households Without Vehicles",
     width=600,
@@ -174,7 +184,10 @@ st.write("Hover over each bar in the graph to view exact numbers of the low acce
 bar_top10 = alt.Chart(top10).mark_bar().encode(
     x=alt.X("CensusTract:N", sort="-x", title="Census Tract", axis=alt.Axis(labelAngle=0)),
     y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
-    tooltip=["County", "LowAccessPopulation"]
+    tooltip=[
+    alt.Tooltip("County:N", title="County"),
+    alt.Tooltip("LowAccessPopulation:Q", title="Low-Access Population", format=",.2f")
+]
 ).properties(
     width=700,
     height=400,

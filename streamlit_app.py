@@ -13,7 +13,6 @@ df["LowAccessPopulation"] = df["LALOWI05_10"].fillna(0)
 # Top 10 tracts by food inaccessibility
 top10 = df.nlargest(10, "LowAccessPopulation")[["CensusTract", "County", "LowAccessPopulation"]]
 
-
 st.subheader("📝 Understanding Food Access")
 
 intro_tab, defs_tab, tips_tab = st.tabs(["📄 Overview", "📚 Definitions", "💡 Tips"])
@@ -166,8 +165,7 @@ bar_chart = alt.Chart(filtered).mark_bar().encode(
     width=600,
     height=430
 ).add_params(
-    selection
-)
+    selection)
 
 # Chart 2B: Full fallback bar chart (unlinked)
 bar_fallback = alt.Chart(filtered).mark_bar().encode(
@@ -188,8 +186,7 @@ bar_fallback = alt.Chart(filtered).mark_bar().encode(
     width=600,
     height=430
 ).add_params(
-    selection
-)
+    selection)
 
 
 # Layout: Put Chart 1 and Chart 2 fallback together
@@ -205,8 +202,7 @@ st.markdown(
     <div style="background-color: #fffbe6; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #665c00; font-size: 16px;">
         💡 Census tracts with <strong>lower median family incomes</strong> often experience <strong>higher poverty rates</strong>, creating a visible inverse trend. These areas also tend to have <strong>more households without vehicles</strong>, deepening access challenges to essential services like grocery stores.<br><br>
         Suffolk and Hampden counties stand out with the <strong>highest share of households lacking vehicles</strong> — a key factor in food access vulnerability.
-    </div>
-    """, unsafe_allow_html=True)
+    </div>""", unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -218,13 +214,11 @@ bar_top10 = alt.Chart(top10).mark_bar().encode(
     y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
     tooltip=[
     alt.Tooltip("County:N", title="County"),
-    alt.Tooltip("LowAccessPopulation:Q", title="Low-Access Population", format=",.2f")
-]
+    alt.Tooltip("LowAccessPopulation:Q", title="Low-Access Population", format=",.2f")]
 ).properties(
     width=700,
     height=400,
-    title="Top 10 Tracts with Highest Food Inaccessibility"
-)
+    title="Top 10 Tracts with Highest Food Inaccessibility")
 
 st.altair_chart(bar_top10, use_container_width=True)
 
@@ -324,9 +318,9 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown(
     f"""
     <div style="background-color: #fdecea; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #611a15; font-size: 16px;">
-        💡 This map reveals that patterns of food access vary significantly across Massachusetts. Counties like Hampshire may show higher rates of LILA tracts, signaling deeper food access challenges.<br><br>
-    </div>
-    """, unsafe_allow_html=True)
+        💡 This map reveals that patterns of food access vary significantly across Massachusetts. Counties like <strong>{selected_county}</strong> 
+        may show higher rates of LILA tracts, signaling deeper food access challenges.<br>
+    </div>""", unsafe_allow_html=True)
 
 
 st.markdown("---")

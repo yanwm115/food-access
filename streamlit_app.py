@@ -111,6 +111,8 @@ selection = alt.selection_point(
     on = "mouseover"
 )
 
+st.markdown("---")
+
 # Chart 1: Scatter Plot with Brushing
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
 brush = alt.selection_interval()
@@ -137,6 +139,8 @@ scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
 ).add_params(
     selection
 ).interactive()
+
+st.markdown("---")
 
 # Chart 2A: Brushed Bar Chart (linked to scatter)
 bar_brushed = alt.Chart(filtered).transform_filter(
@@ -178,6 +182,8 @@ with col1:
     st.altair_chart(scatter, use_container_width=True)
 with col2:
     st.altair_chart(bar_fallback, use_container_width=True)
+
+st.markdown("---")
 
 # Chart 3: Top 10 Food Inaccessible Tracts 
 st.subheader("🏙️ Top 10 Tracts with Highest Low-Access Population")
@@ -282,6 +288,8 @@ fig.update_geos(
 st.subheader("🗺️ Food Access Map")
 st.write("Hover over each county to see which county it is, percentage of LILA Tracts, and more! You can also interact with the map by zooming in and out.")
 st.plotly_chart(fig, use_container_width=True)
+
+st.markdown("---")
 
 # Key Takeaways Section 
 st.subheader("📌 Key Takeaways and Reflections")

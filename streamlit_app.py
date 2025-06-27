@@ -47,24 +47,29 @@ with defs_tab:
     
 with tips_tab:
     st.markdown("""
-### 📈 Using the Charts
-- When **"All"** is selected in the **County** dropdown, all counties will appear in the charts.
-- Hover over any scatterplot point, bar, or map area for detailed information.
-- You can zoom and pan on interactive charts when noted.
+<div style='font-size:18px; font-weight:600;'>📈 Using the Charts</div>
+<ul style='margin-top: 4px;'>
+  <li>When <strong>"All"</strong> is selected in the <strong>County</strong> dropdown, all counties will appear in the charts.</li>
+  <li>Hover over any scatterplot point, bar, or map area for detailed information.</li>
+  <li>You can zoom and pan on interactive charts when noted.</li>
+</ul>
 
-### 🔍 Exploring with the Sidebar
-Each filter is labeled with which visualization it affects:
-- **County**: Focuses the entire dashboard on one county.
-- **Compare with Other Counties**: Adds other counties for side-by-side comparison.
-- **Urban Tracts Only**: Limits the view to only tracts designated as urban.
-- **Median Income Range**: Filters census tracts within your selected income range.
+<div style='font-size:18px; font-weight:600;'>🔍 Exploring with the Sidebar</div>
+<p style='margin: 4px 0;'>Each filter is labeled with which visualization it affects:</p>
+<ul style='margin-top: 4px;'>
+  <li><strong>County</strong>: Focuses the entire dashboard on one county.</li>
+  <li><strong>Compare with Other Counties</strong>: Adds other counties for side-by-side comparison.</li>
+  <li><strong>Urban Tracts Only</strong>: Limits the view to only tracts designated as urban.</li>
+  <li><strong>Median Income Range</strong>: Filters census tracts within your selected income range.</li>
+</ul>
 
-### 🧭 Look Below for Insights
-- Colored context boxes below each chart provide guidance and takeaways based on your selections.
-    """)
+<div style='font-size:18px; font-weight:600;'>🧭 Look Below for Insights</div>
+<ul style='margin-top: 4px;'>
+  <li>Colored context boxes below each chart provide guidance and takeaways based on your selections.</li>
+</ul>
+""", unsafe_allow_html=True)
 
-
-
+st.markdown("### ")
 
 total_tracts = len(df)
 percent_LILA = (df["LILATracts_1And10"].sum() / total_tracts) * 100
@@ -319,7 +324,7 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown(
     f"""
     <div style="background-color: #fdecea; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #611a15; font-size: 16px;">
-        💡 This map reveals that patterns of food access vary significantly across Massachusetts. Counties like <strong>{selected_county}</strong> may show higher rates of LILA tracts, signaling deeper food access challenges.<br><br>
+        💡 This map reveals that patterns of food access vary significantly across Massachusetts. Counties like Hampshire may show higher rates of LILA tracts, signaling deeper food access challenges.<br><br>
     </div>
     """, unsafe_allow_html=True)
 

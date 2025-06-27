@@ -41,13 +41,28 @@ with broader socioeconomic forces to shape food security outcomes.
         """)
 
 
-###Definiitons
+# Definiitons
 # Add definitions expander
 with st.expander("📚 Key Definitions"):
     st.markdown("""
 - **Census Tracts**: Small, relatively permanent geographic subdivisions of a county designed for statistical purposes by the U.S. Census Bureau.
 - **LILA (Low-Income, Low-Access) Tracts**: Census tracts where a significant share of the population is both low-income and lives far from the nearest grocery store.
 - **Urban Tracts**: Tracts designated as part of an urban area, generally meaning they are densely populated and developed compared to rural areas.
+    """)
+
+# Tips for using sidebar
+with st.expander("📝 Tips!"):
+    st.markdown("""
+### 📈 Charts
+- When **County** is selected as **All**, you can hover over the point/bar on the chart/plot.
+- You can hover over the charts to see additional information about the county on all the charts!
+- On the **Median Family Income vs Poverty Rate** scatterplot, you can interact with it by zooming and brushing.  
+
+### 🔍 Sidebar
+- The **County** filter is to help explore the county you are interested in! 
+- The **Compare with Other Counties** can be used to select other counties you want to compare the initial county you chose in **County**. You can choose more than one!
+- By selecting the check box **Urban Tracts Only** you can see the census tracts that fall within an urban area. 
+- By dragging the **Median Income Range** bar, you can choose your desired income range you want to explore. 
     """)
 
 
@@ -100,20 +115,6 @@ selection = alt.selection_point(
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
 brush = alt.selection_interval()
 
-
-with st.expander("📝 Tips!"):
-    st.markdown("""
-### 📈 Charts
-- When **County** is selected as **All**, you can hover over the point/bar on the chart/plot.
-- You can hover over the charts to see additional information about the county on all the charts!
-- On the **Median Family Income vs Poverty Rate** scatterplot, you can interact with it by zooming and brushing.  
-
-### 🔍 Sidebar
-- The **County** filter is to help explore the county you are interested in! 
-- The **Compare with Other Counties** can be used to select other counties you want to compare the initial county you chose in **County**. You can choose more than one!
-- By selecting the check box **Urban Tracts Only** you can see the census tracts that fall within an urban area. 
-- By dragging the **Median Income Range** bar, you can choose your desired income range you want to explore. 
-    """)
     
 scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     x=alt.X("MedianFamilyIncome:Q", title="Median Family Income"),

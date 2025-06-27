@@ -17,27 +17,21 @@ top10 = df.nlargest(10, "LowAccessPopulation")[["CensusTract", "County", "LowAcc
 st.subheader("📝 **Overview**")
 with st.expander("📝 Understanding Food Access"):
     st.markdown("""
-Food access refers to the ability of individuals and communities to obtain affordable and
-nutritious food that meets needs through physical proximity to food sources, economic affordability,
-and social accessibility. Food access is fundamentally linked to public health, economic stability, 
-and social inequity.
+Food access refers to the ability of ​​individuals and communities to obtain affordable, 
+nutritious food –  shaped by physical proximity, economic affordability, and social 
+accessibility. It is fundamentally linked to public health, economic stability, and social equity.
 
-When people lack adequate food access, they may experience food insecurity: the condition of having limited 
-or uncertain availability of nutritionally adequate foods, due to the lack of money and other resources. People who 
-experience food insecurity often live in food deserts (areas with limited access to grocery stores) or food swamps 
-(areas with many fast food and convenience stores).
-                
-Despite being one of the wealthiest states in the nation, Massachusetts faces significant food access 
-challenges across its diverse communities. Urban areas struggle with food deserts and limited grocery store access 
-and have concentrated low-income populations with poor food access. Rural areas present transportation barriers for 
-people who travel long distances to grocery stores.
-                
-The following data visualizations focus on Massachusetts to demonstrate that food access limitations and 
-food insecurity persist even in wealthy states with strong social safety nets. By examining Massachusetts, we can see 
-how economic inequality, geographic barriers, and systemic challenges create food access disparities. The patterns 
-relationships, and insights revealed through the data on Massachusetts can be applied to understand food access 
-challenges in other states across the country, providing a framework for analyzing how local factors interact 
-with broader socioeconomic forces to shape food security outcomes.
+When access is limited, individuals may face food insecurity: limited or uncertain availability 
+of adequate food, often due to lack of money or resources. This is common in food deserts (areas 
+with limited access to grocery stores) and food swamps (areas with many fast food and convenience stores).
+
+Despite being one of the wealthiest states, Massachusetts faces serious food access challenges 
+across its diverse communities. Urban areas often lack grocery stores in low-income neighborhoods, 
+while rural areas struggle with transportation barriers.
+
+This dashboard focuses on Massachusetts to show that food insecurity can persist even in states 
+with strong safety nets. These patterns highlight how economic inequality, geography, and systemic 
+issues shape food access – offering insights that apply across the U.S.
         """)
 
 
@@ -118,7 +112,6 @@ selection = alt.selection_point(
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
 brush = alt.selection_interval()
 
-    
 scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     x=alt.X("MedianFamilyIncome:Q", title="Median Family Income"),
     y=alt.Y("PovertyRate:Q", title="Poverty Rate (%)"),

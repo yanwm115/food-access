@@ -111,7 +111,7 @@ selection = alt.selection_point(
     on = "mouseover"
 )
 
-st.markdown("---")
+
 
 # Chart 1: Scatter Plot with Brushing
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")

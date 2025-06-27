@@ -306,7 +306,7 @@ st.plotly_chart(fig, use_container_width=True)
 
 st.markdown("---")
 
-# Key Takeways and Reflection section
+# Key Takeaways Section 
 st.subheader("📌 Key Takeaways and Reflections")
 
 tab1, tab2, tab3, tab4 = st.tabs(["Summary", "Health Impacts", "Policy Recommendations", "Beyond MA + Action"])
@@ -314,9 +314,9 @@ tab1, tab2, tab3, tab4 = st.tabs(["Summary", "Health Impacts", "Policy Recommend
 with tab1:
     st.markdown("""
 ### 💡 Summary of Insights
-- Tracts with **low median family income** and **high poverty rates** are often also classified as **Low-Income and Low Access (LILA)**.
-- Lack of **vehicle access** is a critical barrier for food access.
-- The **top 10 food-inaccessible tracts** are spread across urban and rural counties.
+- Tracts with **low median family income** and **high poverty rates** are often also classified as Low-Income and Low Access (LILA).
+- Lack of **vehicle access** adds another layer of difficulty in accessing grocery stores, especially in these high-need communities.
+- The **top 10 most food-inaccessible tracts** span multiple counties, revealing that this is not just an urban or rural issue — it's widespread.
 
 This is a **statewide and national challenge** with real public health and equity implications.
     """)
@@ -324,31 +324,33 @@ This is a **statewide and national challenge** with real public health and equit
 with tab2:
     st.markdown("""
 ### 🩺 Health Implications
-
-- **Higher rates of chronic disease** (e.g. diabetes, hypertension) from reliance on low-nutrient, high-calorie food options.
-- **Poor mental health outcomes** due to chronic stress over food insecurity.
-- **Increased healthcare costs** and strain on emergency services, especially in underserved regions.
+Food insecurity contributes to:
+- **Higher rates of chronic disease** (e.g. diabetes, hypertension, cardiovascular disease, obesity) from reliance on processed, 
+                high-calorie food options that provide sustenance bu lack essential nutrients.
+- Poor **mental health outcomes**, increased rates of depression, anxiety, and stress-related disorders due to chronic stress over food insecurity.
+- **Increased healthcare costs** and systemic strain as there would be an increase in emergency room visits, hospital readmissions, and long term 
+                care needs, especially in underserved regions.
     """)
 
 with tab3:
     st.markdown("""
 ### 🏛️ Policy & Equity Recommendations
 
-- 🛒 Incentivize **grocery store development** in underserved tracts.
-- 🚍 Fund **transportation programs** for low-income and vehicle-less communities.
-- 🧾 Scale up **SNAP/WIC access and outreach** in low-access regions.
-- 📜 Remove **zoning barriers** to allow mobile and pop-up grocery markets.
-- 🏗️ Encourage **cross-department collaboration** between health, transit, housing, and food agencies.
-
 **Actionable data like this dashboard** should inform equity-centered urban and rural planning.
+- Incentivize **grocery store development** in underserved tracts.
+- Fund **transportation programs** for low-income and vehicle-less communities.
+- Scale up **SNAP/WIC access and outreach** in low-access regions.
+- Remove **zoning barriers** to allow mobile and pop-up grocery markets.
+- Encourage **cross-department collaboration** between health, transit, housing, and food agencies.
     """)
 
 with tab4:
     st.markdown("""
 ### 🌎 Beyond Massachusetts + Call to Action
 
-- Food deserts and access inequities exist **nationwide**, from Appalachia to the Bay Area.
-- A **just food system** requires collaboration across sectors: food, housing, transportation, and health.
+- While this dashboard focuses on Massachusetts, similar patterns exist nationwide.
+-  A more just food system means confronting transportation, poverty, zoning laws, 
+                and health disparities together.
 - 📣 **What You Can Do**:
     - Vote and advocate for **policies that support food justice**.
     - Partner with or volunteer for **local mutual aid groups and food co-ops**.

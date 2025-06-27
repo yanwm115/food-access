@@ -136,6 +136,17 @@ scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     selection
 ).interactive()
 
+st.markdown(
+    f"""
+    <div style="background-color: #fffbe6; padding: 1rem; border-radius: 0.5rem; text-align: center; color: #665c00; font-size: 16px;">
+        💡 <strong>What does this tell us?</strong><br>
+        Census tracts with <strong>lower median family incomes</strong> often experience <strong>higher poverty rates</strong>, creating a visible inverse trend. These areas also tend to have <strong>more households without vehicles</strong>, deepening access challenges to essential services like grocery stores.<br><br>
+        Suffolk and Hampden counties stand out with the <strong>highest share of households lacking vehicles</strong> — a key factor in food access vulnerability.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 # Chart 2A: Bar Chart (linked to scatter)
 bar_chart = alt.Chart(filtered).mark_bar().encode(
     x=alt.X("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", scale=alt.Scale(domain=[0, 40])),
@@ -297,8 +308,17 @@ fig.update_layout(
     margin={"r": 0, "t": 50, "l": 0, "b": 0})
 
 st.subheader("🗺️ Food Access Map")
-st.write("Selected county is highlighted with a bold black border. Dukes and Nantucket shown as 0% if no data.")
+st.write("🔍 Sidebar: Select county.")
 st.plotly_chart(fig, use_container_width=True)
+
+st.markdown(
+    f"""
+    <div style="background-color: #fdecea; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #611a15; font-size: 16px;">
+        💡 This map reveals that patterns of food access vary significantly across Massachusetts. Counties like <strong>{selected_county}</strong> may show higher rates of LILA tracts, signaling deeper food access challenges.<br><br>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 
 st.markdown("---")

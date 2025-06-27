@@ -14,8 +14,8 @@ top10 = df.nlargest(10, "LowAccessPopulation")[["CensusTract", "County", "LowAcc
 
 
 # Overview/Intro
-st.subheader("📝 **Overview: Understanding Food Access**")
-with st.expander("📝 Overview: Understanding Food Access"):
+st.subheader("📝 **Overview**")
+with st.expander("📝 Understanding Food Access"):
     st.markdown("""
 Food access refers to the ability of individuals and communities to obtain affordable and
 nutritious food that meets needs through physical proximity to food sources, economic affordability,

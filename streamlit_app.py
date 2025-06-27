@@ -100,23 +100,20 @@ if urban_only: filtered = filtered[filtered["Urban"] == 1]
 filtered = filtered[(filtered["MedianFamilyIncome"] >= income_range[0]) &
                     (filtered["MedianFamilyIncome"] <= income_range[1])]
 
-
-# Shared selection - used in both charts
+# Shared selection - responds to both point hover and legend clicks
 selection = alt.selection_point(
-    fields= ["County"],
+    fields=["County"],
     bind='legend',
     on="mouseover"
 )
 
-
-# Chart 1: Scatter Plot with Brushing
+# Chart 1: Scatter Plot
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
-brush = alt.selection_interval()
 
 scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     x=alt.X("MedianFamilyIncome:Q", title="Median Family Income"),
     y=alt.Y("PovertyRate:Q", title="Poverty Rate (%)"),
-    size=alt.Size("Pop2010:Q", title="Population", scale=alt.Scale(range=[0, 100])),
+    size=alt.Size("Pop2010:Q", title="Population", scale=alt.Scale(range=[0, 120])),
     color=alt.condition(
         selection,
         "County:N",
@@ -131,8 +128,6 @@ scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     alt.Tooltip("PovertyRate:Q", title="Poverty Rate (%)", format=".2f"),
     alt.Tooltip("MedianFamilyIncome:Q", title="Median Family Income", format="$.2f")
 ]
-).add_selection(
-    brush
 ).properties(
     title="Median Family Income vs Poverty Rate",
     width=600,
@@ -141,12 +136,8 @@ scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     selection
 ).interactive()
 
-
-
-# Chart 2A: Brushed Bar Chart (linked to scatter)
-bar_brushed = alt.Chart(filtered).transform_filter(
-    brush
-).mark_bar().encode(
+# Chart 2A: Bar Chart (linked to scatter)
+bar_chart = alt.Chart(filtered).mark_bar().encode(
     x=alt.X("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", scale=alt.Scale(domain=[0, 40])),
     y=alt.Y("County:N", sort="-x", title="County"),
     color=alt.condition(
@@ -188,6 +179,7 @@ bar_fallback = alt.Chart(filtered).mark_bar().encode(
 ).add_params(
     selection
 )
+
 
 # Layout: Put Chart 1 and Chart 2 fallback together
 col1, col2 = st.columns(2)

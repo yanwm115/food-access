@@ -196,10 +196,11 @@ bar_top10 = alt.Chart(top10).mark_bar().encode(
 
 st.altair_chart(bar_top10, use_container_width=True)
 
-# CHART 4: Choropleth Map of MA 
+# CHART 4: Choropleth Map of MA
 import plotly.express as px
 import requests
 
+# Aggregate county-level statistics
 county_summary = df.groupby("County").agg({
     "LILATracts_1And10": "sum",
     "CensusTract": "count",
@@ -208,10 +209,25 @@ county_summary = df.groupby("County").agg({
     "PovertyRate": "mean"
 }).reset_index()
 
+# Calculate % LILA Tracts
 county_summary["% LILA Tracts"] = (
     county_summary["LILATracts_1And10"] / county_summary["CensusTract"]
 ) * 100
 
+# Round numeric values to 2 decimal places
+county_summary["MedianFamilyIncome"] = county_summary["MedianFamilyIncome"].round(2)
+county_summary["PovertyRate"] = county_summary["PovertyRate"].round(2)
+county_summary["Pct_Households_No_Vehicle"] = county_summary["Pct_Households_No_Vehicle"].round(2)
+county_summary["% LILA Tracts"] = county_summary["% LILA Tracts"].round(2)
+
+# Rename columns for cleaner tooltips
+county_summary.rename(columns={
+    "MedianFamilyIncome": "Median Family Income ($)",
+    "PovertyRate": "Poverty Rate (%)",
+    "Pct_Households_No_Vehicle": "% Without Vehicle",
+}, inplace=True)
+
+# Add FIPS codes
 county_fips = {
     "Barnstable County": "25001", "Berkshire County": "25003", "Bristol County": "25005",
     "Dukes County": "25007", "Essex County": "25009", "Franklin County": "25011",
@@ -221,13 +237,16 @@ county_fips = {
 }
 county_summary["fips"] = county_summary["County"].map(county_fips)
 
+# Load US counties geojson
 geo_url = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"
 geo_json = requests.get(geo_url).json()
 
+# Merge geo info with summary
 all_fips = [feature["id"] for feature in geo_json["features"]]
 all_counties_df = pd.DataFrame({"fips": all_fips})
 choropleth_df = all_counties_df.merge(county_summary, on="fips", how="left")
 
+# Create the choropleth map
 fig = px.choropleth(
     choropleth_df,
     geojson=geo_json,
@@ -235,22 +254,28 @@ fig = px.choropleth(
     color="% LILA Tracts",
     color_continuous_scale="Reds",
     range_color=(0, county_summary["% LILA Tracts"].max()),
-    labels={"% LILA Tracts": "% LILA Tracts"},
+    labels={
+        "% LILA Tracts": "% LILA Tracts",
+        "Median Family Income ($)": "Median Family Income ($)",
+        "Poverty Rate (%)": "Poverty Rate (%)",
+        "% Without Vehicle": "% Without Vehicle"
+    },
     hover_data={
         "County": True,
-        "MedianFamilyIncome": True,
-        "PovertyRate": True,
-        "Pct_Households_No_Vehicle": True,
+        "Median Family Income ($)": True,
+        "Poverty Rate (%)": True,
+        "% Without Vehicle": True,
         "fips": False
     },
     title="Percentage of Low-Income Low-Access (LILA) Tracts by County"
 )
 
+# Configure map appearance
 fig.update_geos(
     visible=False,
     fitbounds="locations",
-    projection_scale=3.5,  # Zoom out more to show MA + neighbors
-    center={"lat": 42.8, "lon": -73.0}  # Center over MA/NY border
+    projection_scale=3.5,
+    center={"lat": 42.8, "lon": -73.0}
 )
 
 st.subheader("🗺️ Food Access Map")

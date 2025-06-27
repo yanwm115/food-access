@@ -14,8 +14,8 @@ top10 = df.nlargest(10, "LowAccessPopulation")[["CensusTract", "County", "LowAcc
 
 
 # Overview/Intro
-st.subheader("📝 **Overview: Understanding Food Access**")
-with st.expander("📝 Overview: Understanding Food Access"):
+st.subheader("📝 **Overview**")
+with st.expander("📝 Understanding Food Access"):
     st.markdown("""
 Food access refers to the ability of individuals and communities to obtain affordable and
 nutritious food that meets needs through physical proximity to food sources, economic affordability,
@@ -40,6 +40,32 @@ challenges in other states across the country, providing a framework for analyzi
 with broader socioeconomic forces to shape food security outcomes.
         """)
 
+
+# Definiitons
+# Add definitions expander
+with st.expander("📚 Key Definitions"):
+    st.markdown("""
+- **Census Tracts**: Small, relatively permanent geographic subdivisions of a county designed for statistical purposes by the U.S. Census Bureau.
+- **LILA (Low-Income, Low-Access) Tracts**: Census tracts where a significant share of the population is both low-income and lives far from the nearest grocery store.
+- **Urban Tracts**: Tracts designated as part of an urban area, generally meaning they are densely populated and developed compared to rural areas.
+    """)
+
+# Tips for using sidebar
+with st.expander("📝 Tips!"):
+    st.markdown("""
+### 📈 Charts
+- When **County** is selected as **All**, you can hover over the point/bar on the chart/plot.
+- You can hover over the charts to see additional information about the county on all the charts!
+- On the **Median Family Income vs Poverty Rate** scatterplot, you can interact with it by zooming and brushing.  
+
+### 🔍 Sidebar
+- The **County** filter is to help explore the county you are interested in! 
+- The **Compare with Other Counties** can be used to select other counties you want to compare the initial county you chose in **County**. You can choose more than one!
+- By selecting the check box **Urban Tracts Only** you can see the census tracts that fall within an urban area. 
+- By dragging the **Median Income Range** bar, you can choose your desired income range you want to explore. 
+    """)
+
+
 total_tracts = len(df)
 percent_LILA = (df["LILATracts_1And10"].sum() / total_tracts) * 100
 avg_poverty = df["PovertyRate"].mean()
@@ -50,6 +76,8 @@ col1.metric("Total Census Tracts", f"{total_tracts}")
 col2.metric("% LILA Tracts", f"{percent_LILA:.1f}%")
 col3.metric("Average Poverty Rate", f"{avg_poverty:.1f}%")
 col4.metric("Average Median Family Income", f"${avg_income:,.0f}")
+
+st.markdown("---")
 
 # Sidebar Filters
 st.sidebar.header("🔎 Filters")
@@ -78,38 +106,37 @@ filtered = filtered[(filtered["MedianFamilyIncome"] >= income_range[0]) &
                     (filtered["MedianFamilyIncome"] <= income_range[1])]
 
 
-#shared selection
+# Shared selection - used in both charts
 selection = alt.selection_point(
     fields= ["County"],
     bind='legend',
-    on = "mouseover"
+    on="mouseover"
 )
+
 
 # Chart 1: Scatter Plot with Brushing
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
 brush = alt.selection_interval()
 
-
-with st.expander("📝 Tips!"):
-    st.markdown("""
-### 📈 Charts
-- When **County** is selected as **All**, you can hover over the point/bar on the chart/plot.
-- You can hover over the charts to see additional information about the county on all the charts!
-- On the **Median Family Income vs Poverty Rate** scatterplot, you can interact with it by zooming and brushing.  
-
-### 🔍 Sidebar
-- The **County** filter is to help explore the county you are interested in! 
-- The **Compare with Other Counties** can be used to select other counties you want to compare the initial county you chose in **County**. You can choose more than one!
-- By selecting the check box **Urban Tracts Only** you can see the census tracts that fall within an urban area. 
-- By dragging the **Median Income Range** bar, you can choose your desired income range you want to explore. 
-    """)
     
 scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     x=alt.X("MedianFamilyIncome:Q", title="Median Family Income"),
     y=alt.Y("PovertyRate:Q", title="Poverty Rate (%)"),
     size=alt.Size("Pop2010:Q", title="Population", scale=alt.Scale(range=[0, 100])),
-    color=alt.Color("County:N", title="County", scale=alt.Scale(scheme='category20')),
-    tooltip=["CensusTract", "County", "Pop2010", "PovertyRate", "MedianFamilyIncome"]
+    color=alt.condition(
+        selection,
+        "County:N",
+        alt.value('lightgray'),
+        title="County",
+        scale=alt.Scale(scheme='category20')
+    ),
+    tooltip=[
+    alt.Tooltip("CensusTract:N", title="Census Tract"),
+    alt.Tooltip("County:N", title="County"),
+    alt.Tooltip("Pop2010:Q", title="Population", format=",.0f"),
+    alt.Tooltip("PovertyRate:Q", title="Poverty Rate (%)", format=".2f"),
+    alt.Tooltip("MedianFamilyIncome:Q", title="Median Family Income", format="$.2f")
+]
 ).add_selection(
     brush
 ).properties(
@@ -120,14 +147,24 @@ scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     selection
 ).interactive()
 
+
+
 # Chart 2A: Brushed Bar Chart (linked to scatter)
 bar_brushed = alt.Chart(filtered).transform_filter(
     brush
 ).mark_bar().encode(
     x=alt.X("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", scale=alt.Scale(domain=[0, 40])),
     y=alt.Y("County:N", sort="-x", title="County"),
-    color=alt.Color("County:N", title="County", scale=alt.Scale(scheme='category20')),
-    tooltip=["mean(Pct_Households_No_Vehicle):Q"],
+    color=alt.condition(
+        selection,
+        'County:N',
+        alt.value('lightgray'),
+        title='County',
+        scale=alt.Scale(scheme='category20')
+    ),
+    tooltip=[
+    alt.Tooltip("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", format=".2f")
+]
 ).properties(
     title="Percentage of Households Without Vehicles",
     width=600,
@@ -140,8 +177,16 @@ bar_brushed = alt.Chart(filtered).transform_filter(
 bar_fallback = alt.Chart(filtered).mark_bar().encode(
     x=alt.X("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", scale=alt.Scale(domain=[0, 40])),
     y=alt.Y("County:N", sort="-x", title="County"),
-    color=alt.Color("County:N", title="County", scale=alt.Scale(scheme='category20')),
-    tooltip=["mean(Pct_Households_No_Vehicle):Q"],
+    color=alt.condition(
+        selection,
+        'County:N',
+        alt.value('lightgray'),
+        title="County",
+        scale=alt.Scale(scheme='category20')
+    ),
+    tooltip=[
+        alt.Tooltip("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", format=".2f")
+    ]
 ).properties(
     title="Percentage of Households Without Vehicles",
     width=600,
@@ -157,13 +202,18 @@ with col1:
 with col2:
     st.altair_chart(bar_fallback, use_container_width=True)
 
+st.markdown("---")
+
 # Chart 3: Top 10 Food Inaccessible Tracts 
 st.subheader("🏙️ Top 10 Tracts with Highest Low-Access Population")
 st.write("Hover over each bar in the graph to view exact numbers of the low access population in each county and to see which county!")
 bar_top10 = alt.Chart(top10).mark_bar().encode(
     x=alt.X("CensusTract:N", sort="-x", title="Census Tract", axis=alt.Axis(labelAngle=0)),
     y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
-    tooltip=["County", "LowAccessPopulation"]
+    tooltip=[
+    alt.Tooltip("County:N", title="County"),
+    alt.Tooltip("LowAccessPopulation:Q", title="Low-Access Population", format=",.2f")
+]
 ).properties(
     width=700,
     height=400,
@@ -172,10 +222,13 @@ bar_top10 = alt.Chart(top10).mark_bar().encode(
 
 st.altair_chart(bar_top10, use_container_width=True)
 
-# CHART 4: Choropleth Map of MA 
+st.markdown("---")
+
+# CHART 4: Choropleth Map of MA
 import plotly.express as px
 import requests
 
+# Aggregate county-level statistics
 county_summary = df.groupby("County").agg({
     "LILATracts_1And10": "sum",
     "CensusTract": "count",
@@ -184,10 +237,25 @@ county_summary = df.groupby("County").agg({
     "PovertyRate": "mean"
 }).reset_index()
 
+# Calculate % LILA Tracts
 county_summary["% LILA Tracts"] = (
     county_summary["LILATracts_1And10"] / county_summary["CensusTract"]
 ) * 100
 
+# Round numeric values to 2 decimal places
+county_summary["MedianFamilyIncome"] = county_summary["MedianFamilyIncome"].round(2)
+county_summary["PovertyRate"] = county_summary["PovertyRate"].round(2)
+county_summary["Pct_Households_No_Vehicle"] = county_summary["Pct_Households_No_Vehicle"].round(2)
+county_summary["% LILA Tracts"] = county_summary["% LILA Tracts"].round(2)
+
+# Rename columns for cleaner tooltips
+county_summary.rename(columns={
+    "MedianFamilyIncome": "Median Family Income ($)",
+    "PovertyRate": "Poverty Rate (%)",
+    "Pct_Households_No_Vehicle": "% Without Vehicle",
+}, inplace=True)
+
+# Add FIPS codes
 county_fips = {
     "Barnstable County": "25001", "Berkshire County": "25003", "Bristol County": "25005",
     "Dukes County": "25007", "Essex County": "25009", "Franklin County": "25011",
@@ -197,13 +265,16 @@ county_fips = {
 }
 county_summary["fips"] = county_summary["County"].map(county_fips)
 
+# Load US counties geojson
 geo_url = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"
 geo_json = requests.get(geo_url).json()
 
+# Merge geo info with summary
 all_fips = [feature["id"] for feature in geo_json["features"]]
 all_counties_df = pd.DataFrame({"fips": all_fips})
 choropleth_df = all_counties_df.merge(county_summary, on="fips", how="left")
 
+# Create the choropleth map
 fig = px.choropleth(
     choropleth_df,
     geojson=geo_json,
@@ -211,49 +282,81 @@ fig = px.choropleth(
     color="% LILA Tracts",
     color_continuous_scale="Reds",
     range_color=(0, county_summary["% LILA Tracts"].max()),
-    labels={"% LILA Tracts": "% LILA Tracts"},
+    labels={
+        "% LILA Tracts": "% LILA Tracts",
+        "Median Family Income ($)": "Median Family Income ($)",
+        "Poverty Rate (%)": "Poverty Rate (%)",
+        "% Without Vehicle": "% Without Vehicle"
+    },
     hover_data={
         "County": True,
-        "MedianFamilyIncome": True,
-        "PovertyRate": True,
-        "Pct_Households_No_Vehicle": True,
+        "Median Family Income ($)": True,
+        "Poverty Rate (%)": True,
+        "% Without Vehicle": True,
         "fips": False
     },
     title="Percentage of Low-Income Low-Access (LILA) Tracts by County"
 )
 
+# Configure map appearance
 fig.update_geos(
     visible=False,
     fitbounds="locations",
-    projection_scale=3.5,  # Zoom out more to show MA + neighbors
-    center={"lat": 42.8, "lon": -73.0}  # Center over MA/NY border
+    projection_scale=3.5,
+    center={"lat": 42.8, "lon": -73.0}
 )
 
 st.subheader("🗺️ Food Access Map")
 st.write("Hover over each county to see which county it is, percentage of LILA Tracts, and more! You can also interact with the map by zooming in and out.")
 st.plotly_chart(fig, use_container_width=True)
 
-# Key Takeaways Section 
+st.markdown("---")
+
+# Key Takeways and Reflection section
 st.subheader("📌 Key Takeaways and Reflections")
-with st.expander("📌 Key Takeaways and Reflections"):
+
+tab1, tab2, tab3, tab4 = st.tabs(["Summary", "Health Impacts", "Policy Recommendations", "Beyond MA + Action"])
+
+with tab1:
     st.markdown("""
 ### 💡 Summary of Insights
 - Tracts with **low median family income** and **high poverty rates** are often also classified as **Low-Income and Low Access (LILA)**.
-- Lack of **vehicle access** adds another layer of difficulty in accessing grocery stores, especially in these high-need communities.
-- The **top 10 most food-inaccessible tracts** span multiple counties, revealing that this is not just an urban or rural issue — it's widespread.
+- Lack of **vehicle access** is a critical barrier for food access.
+- The **top 10 food-inaccessible tracts** are spread across urban and rural counties.
 
+This is a **statewide and national challenge** with real public health and equity implications.
+    """)
+
+with tab2:
+    st.markdown("""
 ### 🩺 Health Implications
-Food insecurity contributes to:
-- Higher rates of **chronic disease** (e.g. diabetes, hypertension, cardiovascular disease, obesity) due to reliance on processed, calorie dense foods that provide sustenance but lack essential nutrients.
-- Poor **mental health outcomes** increased rates of depression, anxiety, and stress-related disorders from the chronic stress of not knowing when the next meal will come.
-- Increased healthcare costs and systemic strain as there would be an increase in emergency room visits, hospital readmissions, and
-                long term care needs.
 
-### 🏛️ Policy & Equity Considerations
-- Data like this should inform **grocery store placements**, **transportation subsidies**, and **SNAP/WIC outreach**.
-- Equity-focused infrastructure investment can reduce access gaps.
+- **Higher rates of chronic disease** (e.g. diabetes, hypertension) from reliance on low-nutrient, high-calorie food options.
+- **Poor mental health outcomes** due to chronic stress over food insecurity.
+- **Increased healthcare costs** and strain on emergency services, especially in underserved regions.
+    """)
 
-### 🌎 Beyond Massachusetts
-- While this dashboard focuses on Massachusetts, similar patterns exist nationwide.  
-- A more just food system means confronting **transportation**, **poverty**, **zoning laws**, and **health disparities** together. 
+with tab3:
+    st.markdown("""
+### 🏛️ Policy & Equity Recommendations
+
+- 🛒 Incentivize **grocery store development** in underserved tracts.
+- 🚍 Fund **transportation programs** for low-income and vehicle-less communities.
+- 🧾 Scale up **SNAP/WIC access and outreach** in low-access regions.
+- 📜 Remove **zoning barriers** to allow mobile and pop-up grocery markets.
+- 🏗️ Encourage **cross-department collaboration** between health, transit, housing, and food agencies.
+
+**Actionable data like this dashboard** should inform equity-centered urban and rural planning.
+    """)
+
+with tab4:
+    st.markdown("""
+### 🌎 Beyond Massachusetts + Call to Action
+
+- Food deserts and access inequities exist **nationwide**, from Appalachia to the Bay Area.
+- A **just food system** requires collaboration across sectors: food, housing, transportation, and health.
+- 📣 **What You Can Do**:
+    - Vote and advocate for **policies that support food justice**.
+    - Partner with or volunteer for **local mutual aid groups and food co-ops**.
+    - Use and share tools like this dashboard to **inform others and drive action**.
     """)

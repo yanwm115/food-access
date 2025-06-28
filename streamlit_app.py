@@ -39,8 +39,9 @@ issues shape food access – offering insights that apply across the U.S.
 with defs_tab:
     st.markdown("""
 - **Census Tracts**: Small geographic areas within a county, used by the U.S. Census Bureau to collect and analyze population data.  
-- **LILA (Low-Income, Low-Access) Tracts**: Areas where a large portion of residents have low incomes and live far from supermarkets 
-                or large grocery stores. These tracts face compounded challenges in both affordability and physical access to food.  
+- **LILA Tracts**: Low-Income & Low-Access
+    - Areas where a large portion of residents have low incomes and live far from supermarkets or large grocery stores. 
+                These tracts face compounded challenges in both affordability and physical access to food.  
 - **Urban Tracts**: Tracts designated as part of an urban area, generally meaning they are densely populated and developed compared to rural areas.  
 """)
     

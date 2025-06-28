@@ -88,7 +88,7 @@ st.markdown("---")
 # Sidebar Filters
 st.sidebar.header("🔎 Filters")
 counties = ["All"] + sorted(df["County"].dropna().unique())
-selected_county = st.sidebar.selectbox("County", counties, help="Select a specific county to focus on, or choose 'All' to view data for all counties." \
+selected_county = st.sidebar.selectbox("County", counties, help="Select a specific county to focus on, or choose 'All' to view data for all counties."  \
 " Selected county will be highlighted in all 3 visualizations.")
 
 counties_multi= sorted(df["County"].dropna().unique())

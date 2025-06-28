@@ -213,7 +213,7 @@ st.markdown(
     f"""
     <div style="background-color: #fffbe6; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #665c00; font-size: 16px;">
         💡 Census tracts with <strong>lower median family incomes</strong> often experience <strong>higher poverty rates</strong>, creating a visible inverse trend. These areas also tend to have <strong>more households without vehicles</strong>, deepening access challenges to essential services like grocery stores.<br><br>
-        Suffolk and Hampden counties stand out with the <strong>highest share of households lacking vehicles</strong> — a key factor in food access vulnerability.
+        Suffolk and Hampden counties stand out with the <strong>highest share of households lacking vehicles</strong> – a key factor in food access vulnerability.
     </div>""", unsafe_allow_html=True)
 
 st.markdown("---")
@@ -332,7 +332,7 @@ st.markdown(
     <div style="background-color: #e6f3ff; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #665c00; font-size: 16px;">
         💡 Here we took the top 10 census tracts with the highest food inaccessibility to see how low it is in Masachusetts.
         Census tracts with the highest food inaccessibility tend to be the areas we need to focus on the most. It can be seen that 
-        a county in Hampshire has the **highest low access population**, followed by Essex, 
+        a county in Hampshire has the <strong>highest low access population<strong>, followed by Essex, 
         another Hampshire county, and Worcester. <br>
     </div>""", unsafe_allow_html=True)
 
@@ -451,7 +451,7 @@ with tab1:
 ### 💡 Summary of Insights
 - Tracts with **low median family income** and **high poverty rates** are often also classified as Low-Income and Low Access (LILA).
 - Lack of **vehicle access** adds another layer of difficulty in accessing grocery stores, especially in these high-need communities.
-- The **top 10 most food-inaccessible tracts** span multiple counties, revealing that this is not just an urban or rural issue — it's widespread.
+- The **top 10 most food-inaccessible tracts** span multiple counties, revealing that this is not just an urban or rural issue – it's widespread.
 
 This is a **statewide and national challenge** with real public health and equity implications.
     """)

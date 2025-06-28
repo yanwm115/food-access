@@ -461,7 +461,7 @@ with tab2:
 ### 🩺 Health Implications
 Food insecurity contributes to:
 - **Higher rates of chronic disease** (e.g. diabetes, hypertension, cardiovascular disease, obesity) from reliance on processed, 
-                high-calorie food options that provide sustenance bu lack essential nutrients.
+                high-calorie food options that provide sustenance but lack essential nutrients.
 - Poor **mental health outcomes**, increased rates of depression, anxiety, and stress-related disorders due to chronic stress over food insecurity.
 - **Increased healthcare costs** and systemic strain as there would be an increase in emergency room visits, hospital readmissions, and long term 
                 care needs, especially in underserved regions.
@@ -474,7 +474,7 @@ with tab3:
 **Actionable data like this dashboard** should inform equity-centered urban and rural planning.
 - Incentivize **grocery store development** in underserved tracts.
 - Fund **transportation programs** for low-income and vehicle-less communities.
-- Scale up **SNAP/WIC access and outreach** in low-access regions.
+- Scale up **SNAP (Supplemental Nutrition Assistance Program) access and outreach** in low-access regions.
 - Remove **zoning barriers** to allow mobile and pop-up grocery markets.
 - Encourage **cross-department collaboration** between health, transit, housing, and food agencies.
     """)

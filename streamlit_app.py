@@ -222,7 +222,7 @@ st.markdown("---")
 # Chart 3: Food Inaccessible Tracts with Selection Options
 st.subheader("🏙️ Food Inaccessible Tracts Analysis", help="This bar graph shows the top 10 census tracts with the lowest food access.")
 st.write("🔍 **Sidebar:** Select County to explore.")
-st.write("📈 **Chart:** Select from selection box/drop down to view graphs. Hover each bar to view exact numbers of low access population and see which counties are in the top 10!")
+st.write("📈 **Chart:** Select from selection box/drop down to view graphs. Hover over each bar to view exact numbers of low access population and see which counties are in the top 10!")
 
 # Create selection dropdown
 view_option = st.selectbox(

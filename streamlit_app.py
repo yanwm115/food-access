@@ -13,13 +13,14 @@ df["LowAccessPopulation"] = df["LALOWI05_10"].fillna(0)
 # Top 10 tracts by food inaccessibility
 top10 = df.nlargest(10, "LowAccessPopulation")[["CensusTract", "County", "LowAccessPopulation"]]
 
+st.subheader("📝 Understanding Food Access")
 
-# Overview/Intro
-st.subheader("📝 **Overview**")
-with st.expander("📝 Understanding Food Access"):
+intro_tab, defs_tab, tips_tab = st.tabs(["📄 Overview", "📚 Definitions", "💡 Tips"])
+
+with intro_tab:
     st.markdown("""
 Food access refers to the ability of ​​individuals and communities to obtain affordable, 
-nutritious food –  shaped by physical proximity, economic affordability, and social 
+nutritious food – shaped by physical proximity, economic affordability, and social 
 accessibility. It is fundamentally linked to public health, economic stability, and social equity.
 
 When access is limited, individuals may face food insecurity: limited or uncertain availability 
@@ -33,33 +34,42 @@ while rural areas struggle with transportation barriers.
 This dashboard focuses on Massachusetts to show that food insecurity can persist even in states 
 with strong safety nets. These patterns highlight how economic inequality, geography, and systemic 
 issues shape food access – offering insights that apply across the U.S.
-        """)
+""")
 
-
-# Definiitons
-# Add definitions expander
-with st.expander("📚 Key Definitions"):
+with defs_tab:
     st.markdown("""
-- **Census Tracts**: Small, relatively permanent geographic subdivisions of a county designed for statistical purposes by the U.S. Census Bureau.
-- **LILA (Low-Income, Low-Access) Tracts**: Census tracts where a significant share of the population is both low-income and lives far from the nearest grocery store.
-- **Urban Tracts**: Tracts designated as part of an urban area, generally meaning they are densely populated and developed compared to rural areas.
-    """)
-
-# Tips for using sidebar
-with st.expander("📝 Tips!"):
+- **Census Tracts**: Small geographic areas within a county, used by the U.S. Census Bureau to collect and analyze population data.  
+- **LILA Tracts**: Low-Income & Low-Access
+    - Areas where a large portion of residents have low incomes and live far from supermarkets or large grocery stores. 
+                These tracts face compounded challenges in both affordability and physical access to food.  
+- **Urban Tracts**: Tracts designated as part of an urban area, generally meaning they are densely populated and developed compared to rural areas.  
+""")
+    
+with tips_tab:
     st.markdown("""
-### 📈 Charts
-- When **County** is selected as **All**, you can hover over the point/bar on the chart/plot.
-- You can hover over the charts to see additional information about the county on all the charts!
-- On the **Median Family Income vs Poverty Rate** scatterplot, you can interact with it by zooming and brushing.  
+<div style='font-size:18px; font-weight:600;'>📈 Using the Charts</div>
+<ul style='margin-top: 4px;'>
+  <li>When <strong>"All"</strong> is selected in the <strong>County</strong> dropdown, all counties will appear in the charts.</li>
+  <li>Hover over any scatterplot point, bar, or map area for detailed information.</li>
+  <li>You can zoom and pan on interactive charts when noted.</li>
+</ul>
 
-### 🔍 Sidebar
-- The **County** filter is to help explore the county you are interested in! 
-- The **Compare with Other Counties** can be used to select other counties you want to compare the initial county you chose in **County**. You can choose more than one!
-- By selecting the check box **Urban Tracts Only** you can see the census tracts that fall within an urban area. 
-- By dragging the **Median Income Range** bar, you can choose your desired income range you want to explore. 
-    """)
+<div style='font-size:18px; font-weight:600;'>🔍 Exploring with the Sidebar</div>
+<p style='margin: 4px 0;'>Each filter is labeled with which visualization it affects:</p>
+<ul style='margin-top: 4px;'>
+  <li><strong>County</strong>: Focuses the entire dashboard on one county.</li>
+  <li><strong>Compare with Other Counties</strong>: Adds other counties for side-by-side comparison.</li>
+  <li><strong>Urban Tracts Only</strong>: Limits the view to only tracts designated as urban.</li>
+  <li><strong>Median Income Range</strong>: Filters census tracts within your selected income range.</li>
+</ul>
 
+<div style='font-size:18px; font-weight:600;'>🧭 Look Below for Insights</div>
+<ul style='margin-top: 4px;'>
+  <li>Colored context boxes below each chart provide guidance and takeaways based on your selections.</li>
+</ul>
+""", unsafe_allow_html=True)
+
+st.markdown("### ")
 
 total_tracts = len(df)
 percent_LILA = (df["LILATracts_1And10"].sum() / total_tracts) * 100
@@ -136,6 +146,7 @@ scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     selection
 ).interactive()
 
+
 # Chart 2A: Bar Chart (linked to scatter)
 bar_chart = alt.Chart(filtered).mark_bar().encode(
     x=alt.X("mean(Pct_Households_No_Vehicle):Q", title="% Without Vehicle", scale=alt.Scale(domain=[0, 40])),
@@ -155,8 +166,7 @@ bar_chart = alt.Chart(filtered).mark_bar().encode(
     width=600,
     height=430
 ).add_params(
-    selection
-)
+    selection)
 
 # Chart 2B: Full fallback bar chart (unlinked)
 bar_fallback = alt.Chart(filtered).mark_bar().encode(
@@ -177,8 +187,7 @@ bar_fallback = alt.Chart(filtered).mark_bar().encode(
     width=600,
     height=430
 ).add_params(
-    selection
-)
+    selection)
 
 
 # Layout: Put Chart 1 and Chart 2 fallback together
@@ -187,6 +196,14 @@ with col1:
     st.altair_chart(scatter, use_container_width=True)
 with col2:
     st.altair_chart(bar_fallback, use_container_width=True)
+
+
+st.markdown(
+    f"""
+    <div style="background-color: #fffbe6; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #665c00; font-size: 16px;">
+        💡 Census tracts with <strong>lower median family incomes</strong> often experience <strong>higher poverty rates</strong>, creating a visible inverse trend. These areas also tend to have <strong>more households without vehicles</strong>, deepening access challenges to essential services like grocery stores.<br><br>
+        Suffolk and Hampden counties stand out with the <strong>highest share of households lacking vehicles</strong> — a key factor in food access vulnerability.
+    </div>""", unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -259,93 +276,107 @@ else:
 
 st.altair_chart(bar_chart, use_container_width=True)
 
+
 st.markdown("---")
 
-# CHART 4: Choropleth Map of MA
-import plotly.express as px
+# Chart 4: Map
+import plotly.graph_objects as go
 import requests
 
-# Aggregate county-level statistics
-county_summary = df.groupby("County").agg({
+county_fips = {
+    "Barnstable": "25001", "Berkshire": "25003", "Bristol": "25005", "Dukes": "25007",
+    "Essex": "25009", "Franklin": "25011", "Hampden": "25013", "Hampshire": "25015",
+    "Middlesex": "25017", "Nantucket": "25019", "Norfolk": "25021", "Plymouth": "25023",
+    "Suffolk": "25025", "Worcester": "25027"}
+
+county_summary = df.groupby("County", as_index=False).agg({
     "LILATracts_1And10": "sum",
     "CensusTract": "count",
     "Pct_Households_No_Vehicle": "mean",
     "MedianFamilyIncome": "mean",
-    "PovertyRate": "mean"
-}).reset_index()
+    "PovertyRate": "mean"})
 
-# Calculate % LILA Tracts
 county_summary["% LILA Tracts"] = (
-    county_summary["LILATracts_1And10"] / county_summary["CensusTract"]
-) * 100
-
-# Round numeric values to 2 decimal places
-county_summary["MedianFamilyIncome"] = county_summary["MedianFamilyIncome"].round(2)
-county_summary["PovertyRate"] = county_summary["PovertyRate"].round(2)
-county_summary["Pct_Households_No_Vehicle"] = county_summary["Pct_Households_No_Vehicle"].round(2)
-county_summary["% LILA Tracts"] = county_summary["% LILA Tracts"].round(2)
-
-# Rename columns for cleaner tooltips
+    county_summary["LILATracts_1And10"] / county_summary["CensusTract"]) * 100
+county_summary = county_summary.round(2)
 county_summary.rename(columns={
     "MedianFamilyIncome": "Median Family Income ($)",
     "PovertyRate": "Poverty Rate (%)",
     "Pct_Households_No_Vehicle": "% Without Vehicle",
 }, inplace=True)
-
-# Add FIPS codes
-county_fips = {
-    "Barnstable County": "25001", "Berkshire County": "25003", "Bristol County": "25005",
-    "Dukes County": "25007", "Essex County": "25009", "Franklin County": "25011",
-    "Hampden County": "25013", "Hampshire County": "25015", "Middlesex County": "25017",
-    "Nantucket County": "25019", "Norfolk County": "25021", "Plymouth County": "25023",
-    "Suffolk County": "25025", "Worcester County": "25027"
-}
 county_summary["fips"] = county_summary["County"].map(county_fips)
 
-# Load US counties geojson
+for island in ["Dukes", "Nantucket"]:
+    if island not in county_summary["County"].values:
+        county_summary = county_summary.append({
+            "County": island,
+            "LILATracts_1And10": 0,
+            "CensusTract": 1,
+            "% LILA Tracts": 0,
+            "Median Family Income ($)": 0,
+            "Poverty Rate (%)": 0,
+            "% Without Vehicle": 0,
+            "fips": county_fips[island]
+        }, ignore_index=True)
+
 geo_url = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"
 geo_json = requests.get(geo_url).json()
+geo_json["features"] = [f for f in geo_json["features"] if f["id"].startswith("25")]
 
-# Merge geo info with summary
-all_fips = [feature["id"] for feature in geo_json["features"]]
-all_counties_df = pd.DataFrame({"fips": all_fips})
-choropleth_df = all_counties_df.merge(county_summary, on="fips", how="left")
-
-# Create the choropleth map
-fig = px.choropleth(
-    choropleth_df,
+choropleth = go.Choropleth(
     geojson=geo_json,
-    locations="fips",
-    color="% LILA Tracts",
-    color_continuous_scale="Reds",
-    range_color=(0, county_summary["% LILA Tracts"].max()),
-    labels={
-        "% LILA Tracts": "% LILA Tracts",
-        "Median Family Income ($)": "Median Family Income ($)",
-        "Poverty Rate (%)": "Poverty Rate (%)",
-        "% Without Vehicle": "% Without Vehicle"
-    },
-    hover_data={
-        "County": True,
-        "Median Family Income ($)": True,
-        "Poverty Rate (%)": True,
-        "% Without Vehicle": True,
-        "fips": False
-    },
-    title="Percentage of Low-Income Low-Access (LILA) Tracts by County"
-)
+    locations=county_summary["fips"],
+    z=county_summary["% LILA Tracts"],
+    colorscale="Reds",
+    zmin=0,
+    zmax=county_summary["% LILA Tracts"].max(),
+    marker_line_color="black",
+    marker_line_width=0.5,
+    featureidkey="id",
+    colorbar_title="% LILA Tracts",
+    text=county_summary.apply(
+        lambda row: (
+            f"County: {row['County']}<br>"
+            f"% LILA Tracts: {row['% LILA Tracts']:.2f}<br>"
+            f"Median Income: ${row['Median Family Income ($)']:,.0f}<br>"
+            f"Poverty Rate (%): {row['Poverty Rate (%)']:.2f}<br>"
+            f"% Without Vehicle: {row['% Without Vehicle']:.2f}"
+        ), axis=1),
+    hovertemplate="%{text}<extra></extra>")
 
-# Configure map appearance
-fig.update_geos(
-    visible=False,
-    fitbounds="locations",
-    projection_scale=3.5,
-    center={"lat": 42.8, "lon": -73.0}
-)
+highlight = None
+if selected_county != "All" and selected_county in county_fips:
+    selected_fips = county_fips[selected_county]
+    selected_feature = next((f for f in geo_json["features"] if f["id"] == selected_fips), None)
+    if selected_feature:
+        highlight = go.Choropleth(
+            geojson={"type": "FeatureCollection", "features": [selected_feature]},
+            locations=[selected_fips],
+            z=[0],
+            colorscale=[[0, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,0)']],
+            showscale=False,
+            marker_line_color="black",
+            marker_line_width=2.5,
+            featureidkey="id",
+            hoverinfo="skip")
+
+fig = go.Figure(data=[choropleth] + ([highlight] if highlight else []))
+fig.update_geos(fitbounds="locations", visible=False)
+fig.update_layout(
+    title="Percentage of Low-Income Low-Access (LILA) Tracts by Massachusetts County",
+    margin={"r": 0, "t": 50, "l": 0, "b": 0})
 
 st.subheader("🗺️ Food Access Map")
-st.write("Hover over each county to see which county it is, percentage of LILA Tracts, and more! You can also interact with the map by zooming in and out.")
+st.write("🔍 Sidebar: Select county.")
 st.plotly_chart(fig, use_container_width=True)
+
+st.markdown(
+    f"""
+    <div style="background-color: #fdecea; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #611a15; font-size: 16px;">
+        💡 This map reveals that patterns of food access vary significantly across Massachusetts. Counties like <strong>{selected_county}</strong> 
+        may show higher rates of LILA tracts, signaling deeper food access challenges.<br>
+    </div>""", unsafe_allow_html=True)
+
 
 st.markdown("---")
 

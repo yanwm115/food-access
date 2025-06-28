@@ -121,7 +121,7 @@ selection = alt.selection_point(
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
 st.write("🔍 Sidebar: Select County, Compare with Other Counties, Urban Tracts Only, and Median Income Range to explore.")
 st.write("📈 Chart: Zoom in and out of the scatterplot. Hover over the scatter plot and bar graph to view more information. Click" \
-"on the legend to see specific census tracts in each county.")
+" on the legend to see specific census tracts in each county.")
 
 scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     x=alt.X("MedianFamilyIncome:Q", title="Median Family Income"),

@@ -331,7 +331,7 @@ st.markdown(
     <div style="background-color: #e6f3ff; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #665c00; font-size: 16px;">
         💡 Here we took the top 10 census tracts with the highest food inaccessibility to see how low it is in Masachusetts.
         Census tracts with the highest food inaccessibility tend to be the areas we need to focus on the most. It can be seen that 
-        a county in Hampshire has the **highest low access population**, followed by Essex, 
+        a county in Hampshire has the <strong>highest low access population<strong>, followed by Essex, 
         another Hampshire county, and Worcester. <br>
     </div>""", unsafe_allow_html=True)
 

@@ -416,7 +416,7 @@ if selected_county != "All" and selected_county in county_fips:
             colorscale=[[0, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,0)']],
             showscale=False,
             marker_line_color="black",
-            marker_line_width=2.5,
+            marker_line_width=2.8,
             featureidkey="id",
             hoverinfo="skip")
 

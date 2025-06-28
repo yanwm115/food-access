@@ -96,13 +96,13 @@ selected_counties= st.sidebar.multiselect("Compare with Other Counties", countie
 " county selection. This allows you to analyze multiple counties simultaneously. This only applies to the first visualization.")
 
 urban_only = st.sidebar.checkbox("Urban Tracts Only", value=False, help="Check this box to filter the data to show only urban census tracts." \
-" This excludes rural and suburban areas from your analysis. This only applies to the first visualization.")
+" This excludes rural and suburban areas. Only applies to the first visualization.")
 income_min = int(df["MedianFamilyIncome"].min())
 income_max = int(df["MedianFamilyIncome"].max())
 income_range = st.sidebar.slider("Median Income Range", min_value=income_min,
-                                 max_value=income_max, value=(income_min, income_max), help="Adjust this range to filter census tracts" \
-                                 " by their median family income. This helps you focus on specific economic segments of the population." \
-                                 " This only applies to the first visualization.")
+                                 max_value=income_max, value=(income_min, income_max), help="Adjust this range to filter by" \
+                                 " median family income, helping you focus on specific economic segments of the population." \
+                                 " Only applies to the first visualization.")
 
 filtered = df.copy()
 if selected_county != "All" and selected_counties:
@@ -453,7 +453,7 @@ with tab1:
 - Lack of **vehicle access** adds another layer of difficulty in accessing grocery stores, especially in these high-need communities.
 - The **top 10 most food-inaccessible tracts** span multiple counties, revealing that this is not just an urban or rural issue – it's widespread.
 
-This is a **statewide and national challenge** with real public health and equity implications.
+📢 This is a **statewide and national challenge** with real public health and equity implications.
     """)
 
 with tab2:

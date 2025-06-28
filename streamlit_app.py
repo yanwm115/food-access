@@ -81,6 +81,7 @@ col1.metric("Total Census Tracts", f"{total_tracts}")
 col2.metric("% LILA Tracts", f"{percent_LILA:.1f}%")
 col3.metric("Average Poverty Rate", f"{avg_poverty:.1f}%")
 col4.metric("Average Median Family Income", f"${avg_income:,.0f}")
+st.write("*Note: The data used in this dashboard is from the USDA Food Access Research Atlas from 2019.")
 
 st.markdown("---")
 

@@ -223,13 +223,46 @@ view_option = st.selectbox(
     index=0  # Default to first option
 )
 
+# Create shared color scale for consistency
+county_color_scale = alt.Scale(scheme='category20')
+
+# Function to create conditional opacity encoding based on selected county
+def get_opacity_encoding(selected_county):
+    # Always return full opacity - we'll only use stroke for highlighting
+    return alt.value(1.0)
+
+# Function to get stroke encoding based on selected county
+def get_stroke_encoding(selected_county):
+    if selected_county != "All":
+        return alt.condition(
+            alt.datum.County == selected_county,
+            alt.value('black'),
+            alt.value('transparent')
+        )
+    else:
+        return alt.value('transparent')
+
+# Function to get stroke width encoding based on selected county  
+def get_stroke_width_encoding(selected_county):
+    if selected_county != "All":
+        return alt.condition(
+            alt.datum.County == selected_county,
+            alt.value(3),
+            alt.value(0)
+        )
+    else:
+        return alt.value(0)
+
 # Prepare data and display chart based on selection
 if view_option == "Top 10 Highest Low-Access Population":
-    # Chart 1: Default - Top 10 (same format as original)
+    # Chart 1: Default - Top 10 with highlighting
     bar_chart = alt.Chart(top10).mark_bar().encode(
         x=alt.X("CensusTract:N", sort="-x", title="Census Tract", axis=alt.Axis(labelAngle=0)),
         y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
-        color=alt.Color("County:N", scale=alt.Scale(scheme='category20'), title="County"),
+        color=alt.Color("County:N", scale=county_color_scale, title="County"),
+        opacity=get_opacity_encoding(selected_county),
+        stroke=get_stroke_encoding(selected_county),
+        strokeWidth=get_stroke_width_encoding(selected_county),
         tooltip=[
             alt.Tooltip("County:N", title="County"),
             alt.Tooltip("LowAccessPopulation:Q", title="Low-Access Population", format=",.2f")
@@ -242,11 +275,14 @@ if view_option == "Top 10 Highest Low-Access Population":
     st.write("Top 10 census tracts color-coded by county to show which counties have the highest low-access populations.")
     
 elif view_option == "Highest to Lowest by Low-Access Population":
-    # Chart 2: All tracts highest to lowest (same format as original)
+    # Chart 2: All tracts highest to lowest with highlighting
     bar_chart = alt.Chart(top10).mark_bar().encode(
         x=alt.X("CensusTract:N", sort="-y", title="Census Tract", axis=alt.Axis(labelAngle=0)),
         y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
-        color=alt.Color("County:N", scale=alt.Scale(scheme='category20'), title="County"),
+        color=alt.Color("County:N", scale=county_color_scale, title="County"),
+        opacity=get_opacity_encoding(selected_county),
+        stroke=get_stroke_encoding(selected_county),
+        strokeWidth=get_stroke_width_encoding(selected_county),
         tooltip=[
             alt.Tooltip("County:N", title="County"),
             alt.Tooltip("LowAccessPopulation:Q", title="Low-Access Population", format=",.2f")
@@ -262,7 +298,10 @@ else:
     bar_chart = alt.Chart(top10).mark_bar().encode(
         x=alt.X("CensusTract:N", sort="y", title="Census Tract", axis=alt.Axis(labelAngle=0)),
         y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
-        color=alt.Color("County:N", scale=alt.Scale(scheme='category20'), title="County"),
+        color=alt.Color("County:N", scale=county_color_scale, title="County"),
+        opacity=get_opacity_encoding(selected_county),
+        stroke=get_stroke_encoding(selected_county),
+        strokeWidth=get_stroke_width_encoding(selected_county),
         tooltip=[
             alt.Tooltip("County:N", title="County"),
             alt.Tooltip("LowAccessPopulation:Q", title="Low-Access Population", format=",.2f")
@@ -275,6 +314,15 @@ else:
     st.write("Top 10 census tracts ranked from lowest to highest low-access population.")
 
 st.altair_chart(bar_chart, use_container_width=True)
+
+st.markdown(
+    f"""
+    <div style="background-color: #e6f3ff; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #665c00; font-size: 16px;">
+        💡 Here we took the top 10 census tracts with the highest food inaccessibility to see how low it is in Masachusetts.
+        Census tracts with the highest food inaccessibility tend to be the areas we need to focus on the most. It can be seen that 
+        a county in Hampshire has the highest low access population, followed by Essex, 
+        another Hampshire county, and Worcester. <br>
+    </div>""", unsafe_allow_html=True)
 
 
 st.markdown("---")

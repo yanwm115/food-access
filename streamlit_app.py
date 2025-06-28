@@ -119,6 +119,9 @@ selection = alt.selection_point(
 
 # Chart 1: Scatter Plot
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
+st.write("🔍 Sidebar: Select County, Compare with Other Counties, Urban Tracts Only, and Median Income Range to explore.")
+st.write("📈 Chart: Zoom in and out of the scatterplot. Hover over the scatter plot and bar graph to view more information. Click" \
+"on the legend to see specific census tracts in each county.")
 
 scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     x=alt.X("MedianFamilyIncome:Q", title="Median Family Income"),
@@ -210,7 +213,8 @@ st.markdown("---")
 
 # Chart 3: Food Inaccessible Tracts with Selection Options
 st.subheader("🏙️ Food Inaccessible Tracts Analysis")
-st.write("Hover over each bar in the graph to view exact numbers of the low access population in each county and to see which county are in the top 10!")
+st.write("🔍 Sidebar: Select county to explore.")
+st.write("📈 Chart: Select from selection box/drop down to view graphs. Hover each bar to view exact numbers of low access population and see which counties are in the top 10!")
 
 # Create selection dropdown
 view_option = st.selectbox(
@@ -415,7 +419,8 @@ fig.update_layout(
     margin={"r": 0, "t": 50, "l": 0, "b": 0})
 
 st.subheader("🗺️ Food Access Map")
-st.write("🔍 Sidebar: Select county.")
+st.write("🔍 Sidebar: Select county to explore.")
+st.write("📈 Chart: Zoom in and out of the map to explore. Hover each county for more information.")
 st.plotly_chart(fig, use_container_width=True)
 
 st.markdown(

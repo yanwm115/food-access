@@ -123,19 +123,12 @@ selection = alt.selection_point(
 )
 
 # Chart 1: Scatter Plot
-<<<<<<< HEAD
 st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access",
 help="This scatter plot shows how median family income relates to poverty rates." \
 " The bar graph shows the percentage of households without vehicles in each county.")
 st.write("🔍 **Sidebar:** Select County, Compare with Other Counties, Urban Tracts Only, and Median Income Range to explore.")
 st.write("📈 **Chart:** Zoom in and out of the scatterplot. Hover over the scatter plot and bar graph to view more information. Click" \
 "on the legend to see specific census tracts in each county.")
-=======
-st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
-st.write("🔍 Sidebar: Select County, Compare with Other Counties, Urban Tracts Only, and Median Income Range to explore.")
-st.write("📈 Chart: Zoom in and out of the scatterplot. Hover over the scatter plot and bar graph to view more information. Click" \
-" on the legend to see specific census tracts in each county.")
->>>>>>> f31eaa957b83b1295cbc400120bf5c920791b2f9
 
 scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
     x=alt.X("MedianFamilyIncome:Q", title="Median Family Income"),

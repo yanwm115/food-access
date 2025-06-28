@@ -280,14 +280,15 @@ choropleth = go.Choropleth(
     marker_line_width=0.5,
     featureidkey="id",
     colorbar_title="% LILA Tracts",
-    hovertext=county_summary.apply(
+    text=county_summary.apply(
         lambda row: (
-            f"{row['County']}<br>% LILA: {row['% LILA Tracts']:.2f}%<br>"
-            f"Income: ${row['Median Family Income ($)']:,}<br>"
-            f"Poverty Rate: {row['Poverty Rate (%)']:.2f}%<br>"
-            f"% w/o Vehicle: {row['% Without Vehicle']:.2f}%"
+            f"County: {row['County']}<br>"
+            f"% LILA Tracts: {row['% LILA Tracts']:.2f}<br>"
+            f"Median Income: ${row['Median Family Income ($)']:,.0f}<br>"
+            f"Poverty Rate (%): {row['Poverty Rate (%)']:.2f}<br>"
+            f"% Without Vehicle: {row['% Without Vehicle']:.2f}"
         ), axis=1),
-    hoverinfo="text")
+    hovertemplate="%{text}<extra></extra>")
 
 highlight = None
 if selected_county != "All" and selected_county in county_fips:

@@ -435,7 +435,7 @@ st.markdown(
     f"""
     <div style="background-color: #fdecea; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #611a15; font-size: 16px;">
         💡 This map reveals that patterns of food access vary significantly across Massachusetts. Counties like Hampshire 
-        may show higher rates of LILA tracts, signaling deeper food access challenges.<br>
+        may show <strong>higher rates of LILA tracts, signaling deeper food access challenges.<strong><br>
     </div>""", unsafe_allow_html=True)
 
 

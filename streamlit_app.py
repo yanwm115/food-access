@@ -190,23 +190,74 @@ with col2:
 
 st.markdown("---")
 
-# Chart 3: Top 10 Food Inaccessible Tracts 
-st.subheader("🏙️ Top 10 Tracts with Highest Low-Access Population")
-st.write("Hover over each bar in the graph to view exact numbers of the low access population in each county and to see which county!")
-bar_top10 = alt.Chart(top10).mark_bar().encode(
-    x=alt.X("CensusTract:N", sort="-x", title="Census Tract", axis=alt.Axis(labelAngle=0)),
-    y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
-    tooltip=[
-    alt.Tooltip("County:N", title="County"),
-    alt.Tooltip("LowAccessPopulation:Q", title="Low-Access Population", format=",.2f")
-]
-).properties(
-    width=700,
-    height=400,
-    title="Top 10 Tracts with Highest Food Inaccessibility"
+
+# Chart 3: Food Inaccessible Tracts with Selection Options
+st.subheader("🏙️ Food Inaccessible Tracts Analysis")
+st.write("Hover over each bar in the graph to view exact numbers of the low access population in each county and to see which county are in the top 10!")
+
+# Create selection dropdown
+view_option = st.selectbox(
+    "Select view:",
+    options=[
+        "Top 10 Highest Low-Access Population",
+        "Highest to Lowest by Low-Access Population", 
+        "Lowest to Highest by Low-Access Population",
+    ],
+    index=0  # Default to first option
 )
 
-st.altair_chart(bar_top10, use_container_width=True)
+# Prepare data and display chart based on selection
+if view_option == "Top 10 Highest Low-Access Population":
+    # Chart 1: Default - Top 10 (same format as original)
+    bar_chart = alt.Chart(top10).mark_bar().encode(
+        x=alt.X("CensusTract:N", sort="-x", title="Census Tract", axis=alt.Axis(labelAngle=0)),
+        y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
+        color=alt.Color("County:N", scale=alt.Scale(scheme='category20'), title="County"),
+        tooltip=[
+            alt.Tooltip("County:N", title="County"),
+            alt.Tooltip("LowAccessPopulation:Q", title="Low-Access Population", format=",.2f")
+        ]
+    ).properties(
+        width=700,
+        height=400,
+        title="Top 10 Tracts with Highest Food Inaccessibility"
+    )
+    st.write("Top 10 census tracts color-coded by county to show which counties have the highest low-access populations.")
+    
+elif view_option == "Highest to Lowest by Low-Access Population":
+    # Chart 2: All tracts highest to lowest (same format as original)
+    bar_chart = alt.Chart(top10).mark_bar().encode(
+        x=alt.X("CensusTract:N", sort="-y", title="Census Tract", axis=alt.Axis(labelAngle=0)),
+        y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
+        color=alt.Color("County:N", scale=alt.Scale(scheme='category20'), title="County"),
+        tooltip=[
+            alt.Tooltip("County:N", title="County"),
+            alt.Tooltip("LowAccessPopulation:Q", title="Low-Access Population", format=",.2f")
+        ]
+    ).properties(
+        width=700,
+        height=400,
+        title="Top 10 Census Tracts Highest to Lowest by Low-Access Population"
+    )
+    st.write("Top 10 census tracts ranked from highest to lowest low-access population.")
+    
+else:
+    bar_chart = alt.Chart(top10).mark_bar().encode(
+        x=alt.X("CensusTract:N", sort="y", title="Census Tract", axis=alt.Axis(labelAngle=0)),
+        y=alt.Y("LowAccessPopulation:Q", title="Low-Access Population"),
+        color=alt.Color("County:N", scale=alt.Scale(scheme='category20'), title="County"),
+        tooltip=[
+            alt.Tooltip("County:N", title="County"),
+            alt.Tooltip("LowAccessPopulation:Q", title="Low-Access Population", format=",.2f")
+        ]
+    ).properties(
+        width=700,
+        height=400,
+        title="Top 10 Census Tracts Lowest to Highest Low-Access Population"
+    )
+    st.write("Top 10 census tracts ranked from lowest to highest low-access population.")
+
+st.altair_chart(bar_chart, use_container_width=True)
 
 st.markdown("---")
 

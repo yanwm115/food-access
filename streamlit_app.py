@@ -428,7 +428,7 @@ fig.update_layout(
 
 st.subheader("🗺️ Food Access Map", help="This choropleth map shows the counties based on the percentage of LILA.")
 st.write("🔍 **Sidebar:** Select County to explore.")
-st.write("📈 **Chart:** Zoom in and out of the map to explore. Hover each county for more information.")
+st.write("📈 **Chart:** Zoom in and out of the map to explore. Hover over each county for more information.")
 st.plotly_chart(fig, use_container_width=True)
 
 st.markdown(

@@ -213,7 +213,7 @@ st.markdown("---")
 
 # Chart 3: Food Inaccessible Tracts with Selection Options
 st.subheader("🏙️ Food Inaccessible Tracts Analysis")
-st.write("🔍 Sidebar: Select county to explore.")
+st.write("🔍 Sidebar: Select County to explore.")
 st.write("📈 Chart: Select from selection box/drop down to view graphs. Hover each bar to view exact numbers of low access population and see which counties are in the top 10!")
 
 # Create selection dropdown
@@ -419,7 +419,7 @@ fig.update_layout(
     margin={"r": 0, "t": 50, "l": 0, "b": 0})
 
 st.subheader("🗺️ Food Access Map")
-st.write("🔍 Sidebar: Select county to explore.")
+st.write("🔍 Sidebar: Select County to explore.")
 st.write("📈 Chart: Zoom in and out of the map to explore. Hover each county for more information.")
 st.plotly_chart(fig, use_container_width=True)
 

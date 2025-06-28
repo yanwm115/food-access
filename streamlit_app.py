@@ -87,16 +87,21 @@ st.markdown("---")
 # Sidebar Filters
 st.sidebar.header("🔎 Filters")
 counties = ["All"] + sorted(df["County"].dropna().unique())
-selected_county = st.sidebar.selectbox("County", counties)
+selected_county = st.sidebar.selectbox("County", counties, help="Select a specific county to focus on, or choose 'All' to view data for all counties." \
+" Selected county will be highlighted in all 3 visualizations.")
 
 counties_multi= sorted(df["County"].dropna().unique())
-selected_counties= st.sidebar.multiselect("Compare with Other Counties", counties_multi)
+selected_counties= st.sidebar.multiselect("Compare with Other Counties", counties_multi, help="Choose additional counties to compare alongside your main" \
+" county selection. This allows you to analyze multiple counties simultaneously. This only applies to the first visualization.")
 
-urban_only = st.sidebar.checkbox("Urban Tracts Only", value=False)
+urban_only = st.sidebar.checkbox("Urban Tracts Only", value=False, help="Check this box to filter the data to show only urban census tracts." \
+" This excludes rural and suburban areas from your analysis. This only applies to the first visualization.")
 income_min = int(df["MedianFamilyIncome"].min())
 income_max = int(df["MedianFamilyIncome"].max())
 income_range = st.sidebar.slider("Median Income Range", min_value=income_min,
-                                 max_value=income_max, value=(income_min, income_max))
+                                 max_value=income_max, value=(income_min, income_max), help="Adjust this range to filter census tracts" \
+                                 " by their median family income. This helps you focus on specific economic segments of the population." \
+                                 " This only applies to the first visualization.")
 
 filtered = df.copy()
 if selected_county != "All" and selected_counties:
@@ -118,9 +123,11 @@ selection = alt.selection_point(
 )
 
 # Chart 1: Scatter Plot
-st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access")
-st.write("🔍 Sidebar: Select County, Compare with Other Counties, Urban Tracts Only, and Median Income Range to explore.")
-st.write("📈 Chart: Zoom in and out of the scatterplot. Hover over the scatter plot and bar graph to view more information. Click" \
+st.subheader("📊 Relationships Between Income, Poverty & Vehicle Access",
+help="This scatter plot shows how median family income relates to poverty rates." \
+" The bar graph shows the percentage of households without vehicles in each county.")
+st.write("🔍 **Sidebar:** Select County, Compare with Other Counties, Urban Tracts Only, and Median Income Range to explore.")
+st.write("📈 **Chart:** Zoom in and out of the scatterplot. Hover over the scatter plot and bar graph to view more information. Click" \
 "on the legend to see specific census tracts in each county.")
 
 scatter = alt.Chart(filtered).mark_circle(opacity=0.7).encode(
@@ -212,9 +219,9 @@ st.markdown("---")
 
 
 # Chart 3: Food Inaccessible Tracts with Selection Options
-st.subheader("🏙️ Food Inaccessible Tracts Analysis")
-st.write("🔍 Sidebar: Select County to explore.")
-st.write("📈 Chart: Select from selection box/drop down to view graphs. Hover each bar to view exact numbers of low access population and see which counties are in the top 10!")
+st.subheader("🏙️ Food Inaccessible Tracts Analysis", help="This bar graph shows the top 10 census tracts with the lowest food access.")
+st.write("🔍 **Sidebar:** Select County to explore.")
+st.write("📈 **Chart:** Select from selection box/drop down to view graphs. Hover each bar to view exact numbers of low access population and see which counties are in the top 10!")
 
 # Create selection dropdown
 view_option = st.selectbox(
@@ -324,7 +331,7 @@ st.markdown(
     <div style="background-color: #e6f3ff; padding: 1rem; border-radius: 0.5rem; text-align: left; color: #665c00; font-size: 16px;">
         💡 Here we took the top 10 census tracts with the highest food inaccessibility to see how low it is in Masachusetts.
         Census tracts with the highest food inaccessibility tend to be the areas we need to focus on the most. It can be seen that 
-        a county in Hampshire has the highest low access population, followed by Essex, 
+        a county in Hampshire has the **highest low access population**, followed by Essex, 
         another Hampshire county, and Worcester. <br>
     </div>""", unsafe_allow_html=True)
 
@@ -418,9 +425,9 @@ fig.update_layout(
     title="Percentage of Low-Income Low-Access (LILA) Tracts by Massachusetts County",
     margin={"r": 0, "t": 50, "l": 0, "b": 0})
 
-st.subheader("🗺️ Food Access Map")
-st.write("🔍 Sidebar: Select County to explore.")
-st.write("📈 Chart: Zoom in and out of the map to explore. Hover each county for more information.")
+st.subheader("🗺️ Food Access Map", help="This choropleth map shows the counties based on the percentage of LILA.")
+st.write("🔍 **Sidebar:** Select County to explore.")
+st.write("📈 **Chart:** Zoom in and out of the map to explore. Hover each county for more information.")
 st.plotly_chart(fig, use_container_width=True)
 
 st.markdown(
